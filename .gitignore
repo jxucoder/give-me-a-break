@@ -1,0 +1,29 @@
+# Xcode build artifacts
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Xcode temporary files
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods (if used)
+Pods/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output

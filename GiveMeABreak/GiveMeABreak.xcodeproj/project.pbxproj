@@ -1,0 +1,412 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		11944FF4C31E3355665A54AF /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786FA0459804211851AEA8B0 /* MenuBarView.swift */; };
+		172D8CA366F2338D20008B5C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE195B6612CD61C11084A96C /* AppSettings.swift */; };
+		2D9F468A963B7E82C63EC9F4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */; };
+		38F98BB3364404DBCB314B5D /* MenuBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */; };
+		583A673AFFFA77E6B17AFA72 /* ReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */; };
+		6A3ACAE64207B38867077B09 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469F1E22696BD50A5703BF22 /* Assets.xcassets */; };
+		761A8FD2456E737C6C53FC54 /* GiveMeABreakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6A97D2912CCF77CFFF32E /* GiveMeABreakApp.swift */; };
+		7E7E04A61B825904F40C8084 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BE9E485BC85B5112B618BB /* SettingsViewModel.swift */; };
+		8BA5E7EDD141FD3216483E6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792063B22C2A936B2B041F95 /* AppDelegate.swift */; };
+		C139A260D1DFCABEE43782CC /* LLMSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */; };
+		C9AB0876CB5D8656E24F3CB5 /* ReminderSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C40CD4ABCFE59610AB83DA /* ReminderSettingsView.swift */; };
+		E080C6B6EACA1555765443DE /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0458441EFF9AFB3A1562689 /* ReminderType.swift */; };
+		E39BD7849264184BB751F68D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */; };
+		E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F7DE5BBC4C421178792C8C /* SettingsView.swift */; };
+		F95A5F2FA9C52284B7029E01 /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DCFEE435AB25EAC460D91 /* LLMService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04C6A97D2912CCF77CFFF32E /* GiveMeABreakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveMeABreakApp.swift; sourceTree = "<group>"; };
+		09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMSettingsView.swift; sourceTree = "<group>"; };
+		469F1E22696BD50A5703BF22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		68BE9E485BC85B5112B618BB /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		6D1E0EBBF880BC4FD14EEBFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		786FA0459804211851AEA8B0 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		792063B22C2A936B2B041F95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderScheduler.swift; sourceTree = "<group>"; };
+		A8F7DE5BBC4C421178792C8C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B0458441EFF9AFB3A1562689 /* ReminderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderType.swift; sourceTree = "<group>"; };
+		BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViewModel.swift; sourceTree = "<group>"; };
+		CE195B6612CD61C11084A96C /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		D22DCFEE435AB25EAC460D91 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
+		D9C40CD4ABCFE59610AB83DA /* ReminderSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsView.swift; sourceTree = "<group>"; };
+		D9D351E0B99801E2F2152713 /* GiveMeABreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GiveMeABreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		037E7096A579CC3DBA89966E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				469F1E22696BD50A5703BF22 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		0D5FB1D1DFF066700106D969 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9D351E0B99801E2F2152713 /* GiveMeABreak.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4B2F6E845EDBF1955166A752 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */,
+				68BE9E485BC85B5112B618BB /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		610F430001594153A7960DB6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D22DCFEE435AB25EAC460D91 /* LLMService.swift */,
+				6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */,
+				881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		80188903E01BB69F0C0B4CD0 /* GiveMeABreak */ = {
+			isa = PBXGroup;
+			children = (
+				6D1E0EBBF880BC4FD14EEBFB /* Info.plist */,
+				F98BF0E63E2DA9B6D80C0C3C /* App */,
+				B8E9C89C8396954FF2D90E16 /* Models */,
+				037E7096A579CC3DBA89966E /* Resources */,
+				610F430001594153A7960DB6 /* Services */,
+				4B2F6E845EDBF1955166A752 /* ViewModels */,
+				F50BADDFC80AD20A12B00B78 /* Views */,
+			);
+			path = GiveMeABreak;
+			sourceTree = "<group>";
+		};
+		B8E9C89C8396954FF2D90E16 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CE195B6612CD61C11084A96C /* AppSettings.swift */,
+				B0458441EFF9AFB3A1562689 /* ReminderType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F3C5EA92C3D920C400D5A490 = {
+			isa = PBXGroup;
+			children = (
+				80188903E01BB69F0C0B4CD0 /* GiveMeABreak */,
+				0D5FB1D1DFF066700106D969 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F50BADDFC80AD20A12B00B78 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */,
+				426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */,
+				786FA0459804211851AEA8B0 /* MenuBarView.swift */,
+				D9C40CD4ABCFE59610AB83DA /* ReminderSettingsView.swift */,
+				A8F7DE5BBC4C421178792C8C /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F98BF0E63E2DA9B6D80C0C3C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				792063B22C2A936B2B041F95 /* AppDelegate.swift */,
+				04C6A97D2912CCF77CFFF32E /* GiveMeABreakApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		471A230EFF5C6D2E1B239172 /* GiveMeABreak */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52468BE9DE47CC66EA5C5D42 /* Build configuration list for PBXNativeTarget "GiveMeABreak" */;
+			buildPhases = (
+				2DDFE823D6F5CE6B570B884D /* Sources */,
+				5C728D6CDC3E62FFD3FCA8EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GiveMeABreak;
+			packageProductDependencies = (
+			);
+			productName = GiveMeABreak;
+			productReference = D9D351E0B99801E2F2152713 /* GiveMeABreak.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB6990D36CE63596C49DCCD4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					471A230EFF5C6D2E1B239172 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 8B8E0A393E0621A735BEFDA8 /* Build configuration list for PBXProject "GiveMeABreak" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F3C5EA92C3D920C400D5A490;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				471A230EFF5C6D2E1B239172 /* GiveMeABreak */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5C728D6CDC3E62FFD3FCA8EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A3ACAE64207B38867077B09 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2DDFE823D6F5CE6B570B884D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BA5E7EDD141FD3216483E6F /* AppDelegate.swift in Sources */,
+				172D8CA366F2338D20008B5C /* AppSettings.swift in Sources */,
+				E39BD7849264184BB751F68D /* GeneralSettingsView.swift in Sources */,
+				761A8FD2456E737C6C53FC54 /* GiveMeABreakApp.swift in Sources */,
+				F95A5F2FA9C52284B7029E01 /* LLMService.swift in Sources */,
+				C139A260D1DFCABEE43782CC /* LLMSettingsView.swift in Sources */,
+				11944FF4C31E3355665A54AF /* MenuBarView.swift in Sources */,
+				38F98BB3364404DBCB314B5D /* MenuBarViewModel.swift in Sources */,
+				2D9F468A963B7E82C63EC9F4 /* NotificationService.swift in Sources */,
+				583A673AFFFA77E6B17AFA72 /* ReminderScheduler.swift in Sources */,
+				C9AB0876CB5D8656E24F3CB5 /* ReminderSettingsView.swift in Sources */,
+				E080C6B6EACA1555765443DE /* ReminderType.swift in Sources */,
+				E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */,
+				7E7E04A61B825904F40C8084 /* SettingsViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0E35C9C355F737B80022DDCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		1D1EDCE61DB0E2EBE37C03FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = GiveMeABreak/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
+				PRODUCT_NAME = "Give Me A Break";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		6F2AF66E0D8C4E51CF3EC74C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B4CE0273E169852CBADFAB91 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = GiveMeABreak/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
+				PRODUCT_NAME = "Give Me A Break";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52468BE9DE47CC66EA5C5D42 /* Build configuration list for PBXNativeTarget "GiveMeABreak" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D1EDCE61DB0E2EBE37C03FE /* Debug */,
+				B4CE0273E169852CBADFAB91 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8B8E0A393E0621A735BEFDA8 /* Build configuration list for PBXProject "GiveMeABreak" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F2AF66E0D8C4E51CF3EC74C /* Debug */,
+				0E35C9C355F737B80022DDCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB6990D36CE63596C49DCCD4 /* Project object */;
+}
