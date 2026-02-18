@@ -231,7 +231,7 @@ final class ReminderScheduler: ObservableObject {
 
             let message: String
             if settings.llmEnabled && llmService.isModelReady {
-                message = await llmService.generateMessage(for: type, tone: settings.llmTone)
+                message = await llmService.generateMessage(for: type, tone: settings.llmTone, customPrompt: settings.customPrompt)
             } else {
                 message = type.fallbackMessages.randomElement()!
             }
@@ -250,7 +250,7 @@ final class ReminderScheduler: ObservableObject {
         Task {
             let message: String
             if settings.llmEnabled && llmService.isModelReady {
-                message = await llmService.generateMessage(for: type, tone: settings.llmTone)
+                message = await llmService.generateMessage(for: type, tone: settings.llmTone, customPrompt: settings.customPrompt)
             } else {
                 message = type.fallbackMessages.randomElement()!
             }

@@ -8,11 +8,6 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
 
-            ReminderSettingsView()
-                .tabItem {
-                    Label("Reminders", systemImage: "bell")
-                }
-
             LLMSettingsView()
                 .tabItem {
                     Label("AI Messages", systemImage: "brain")

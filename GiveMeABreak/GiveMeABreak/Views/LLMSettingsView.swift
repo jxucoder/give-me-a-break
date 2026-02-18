@@ -20,6 +20,21 @@ struct LLMSettingsView: View {
             }
 
             if settingsVM.settings.llmEnabled {
+                Section("Custom Prompt") {
+                    TextEditor(text: $settingsVM.settings.customPrompt)
+                        .font(.body)
+                        .frame(minHeight: 60, maxHeight: 120)
+                        .scrollContentBackground(.hidden)
+
+                    if settingsVM.settings.customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Text("Leave empty to use the default prompt. Otherwise, describe how you want your reminder messages written — e.g. \"Write reminders as if you're a pirate\" or \"Keep it under 10 words and very direct\".")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            if settingsVM.settings.llmEnabled {
                 Section("On-Device Model") {
                     modelStatusView
 

@@ -3,9 +3,12 @@ build/
 DerivedData/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 *.swp
 *~
 
@@ -13,6 +16,10 @@ DerivedData/
 *.moved-aside
 *.xcuserstate
 *.xcscmblueprint
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
 
 # Swift Package Manager
 .build/
@@ -27,3 +34,12 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
+
+# IDE / Editor
+.idea/
+.vscode/
+*.code-workspace
+.claude/
+
+# Archives
+*.xcarchive

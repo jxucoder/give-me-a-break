@@ -63,6 +63,8 @@ struct MenuBarView: View {
             .padding(.bottom, 12)
         }
         .frame(width: 280)
+        .onAppear { viewModel.menuDidAppear() }
+        .onDisappear { viewModel.menuDidDisappear() }
     }
 
     // MARK: - Timer Card

@@ -13,6 +13,7 @@ final class MenuBarViewModel: ObservableObject {
     private var displayTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
     private var isStarted = false
+    private var isVisible = false
 
     private init() {}
 
@@ -25,42 +26,72 @@ final class MenuBarViewModel: ObservableObject {
         scheduler.objectWillChange
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
-                self?.updateDisplayTimers()
+                guard let self, self.isVisible else { return }
+                self.updateDisplayTimers()
             }
             .store(in: &cancellables)
 
-        startDisplayTimer()
         scheduler.configure(with: settingsVM.settings)
         observeSettings()
+    }
+
+    // MARK: - Visibility
+
+    func menuDidAppear() {
+        guard !isVisible else { return }
+        isVisible = true
+        updateDisplayTimers()
+        startDisplayTimer()
+    }
+
+    func menuDidDisappear() {
+        isVisible = false
+        displayTimer?.invalidate()
+        displayTimer = nil
     }
 
     // MARK: - Display Timer
 
     private func startDisplayTimer() {
+        displayTimer?.invalidate()
         displayTimer = Timer(timeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.updateDisplayTimers()
             }
         }
-        RunLoop.main.add(displayTimer!, forMode: .common)
+        RunLoop.main.add(displayTimer!, forMode: .default)
     }
 
     private func updateDisplayTimers() {
+        var changed = false
         for type in ReminderType.allCases {
             if let remaining = scheduler.timeRemaining(for: type) {
-                displayTimers[type] = formatTimeInterval(remaining)
+                let newText = formatTimeInterval(remaining)
                 let total = TimeInterval((scheduler.timerStates[type]?.intervalMinutes ?? type.defaultIntervalMinutes) * 60)
-                timerProgress[type] = total > 0 ? max(0, min(1, 1.0 - remaining / total)) : 0
-            } else if scheduler.isPaused(for: type) {
-                // Show frozen remaining time for paused timers
-                displayTimers[type] = nil
-                timerProgress[type] = nil
+                let newProgress = total > 0 ? max(0, min(1, 1.0 - remaining / total)) : 0
+
+                if displayTimers[type] != newText {
+                    displayTimers[type] = newText
+                    changed = true
+                }
+                if timerProgress[type] != newProgress {
+                    timerProgress[type] = newProgress
+                    changed = true
+                }
             } else {
-                displayTimers[type] = nil
-                timerProgress[type] = nil
+                if displayTimers[type] != nil {
+                    displayTimers[type] = nil
+                    changed = true
+                }
+                if timerProgress[type] != nil {
+                    timerProgress[type] = nil
+                    changed = true
+                }
             }
         }
-        objectWillChange.send()
+        if changed {
+            objectWillChange.send()
+        }
     }
 
     private func formatTimeInterval(_ interval: TimeInterval) -> String {

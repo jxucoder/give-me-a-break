@@ -57,7 +57,7 @@ final class LLMService: ObservableObject {
 
     // MARK: - Message Generation
 
-    func generateMessage(for type: ReminderType, tone: LLMTone) async -> String {
+    func generateMessage(for type: ReminderType, tone: LLMTone, customPrompt: String = "") async -> String {
         #if canImport(FoundationModels)
         guard #available(macOS 26.0, *) else {
             return type.fallbackMessages.randomElement()!
@@ -77,10 +77,19 @@ final class LLMService: ObservableObject {
             1-2 sentences max, under 120 characters. Be \(tone.promptDescription).
             """
 
-        let prompt = """
-            Write a short notification reminding someone about \(type.promptDescription). \
-            Be original and vary your phrasing. Output only the reminder text.
-            """
+        let prompt: String
+        if customPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            prompt = """
+                Write a short notification reminding someone about \(type.promptDescription). \
+                Be original and vary your phrasing. Output only the reminder text.
+                """
+        } else {
+            prompt = """
+                \(customPrompt.trimmingCharacters(in: .whitespacesAndNewlines)) \
+                The reminder type is: \(type.promptDescription). \
+                Output only the reminder text.
+                """
+        }
 
         do {
             let session = LanguageModelSession {
