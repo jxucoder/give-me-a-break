@@ -44,7 +44,7 @@ enum ReminderType: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .breakReminder: return true
         case .posture: return true
-        case .standSit: return false
+        case .standSit: return true
         }
     }
 
