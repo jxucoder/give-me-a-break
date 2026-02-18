@@ -12,6 +12,7 @@ struct AppSettings: Codable, Equatable {
     var llmEnabled: Bool
     var llmTone: LLMTone
     var customPrompt: String
+    var showHealthFacts: Bool
 
     static let `default` = AppSettings(
         launchAtLogin: false,
@@ -26,7 +27,8 @@ struct AppSettings: Codable, Equatable {
         ),
         llmEnabled: false,
         llmTone: .friendly,
-        customPrompt: ""
+        customPrompt: "Write a short notification reminding someone about their break. Be original and vary your phrasing.",
+        showHealthFacts: true
     )
 
     func reminderSettings(for type: ReminderType) -> ReminderSettings {

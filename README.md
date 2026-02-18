@@ -1,6 +1,10 @@
-# Give Me A Break
+<p align="center">
+  <img src="assets/logo.png" alt="Give Me A Break" width="200">
+</p>
 
-A lightweight macOS menu bar app that reminds you to take breaks, check your posture, and switch between standing and sitting throughout the day.
+<h1 align="center">Give Me A Break</h1>
+
+<p align="center">A lightweight macOS menu bar app that reminds you to take breaks, check your posture, and switch between standing and sitting throughout the day.</p>
 
 ## Features
 
@@ -79,4 +83,4 @@ All settings persist via `UserDefaults`:
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+Apache License 2.0. See [LICENSE](LICENSE) for details.

@@ -236,9 +236,14 @@ final class ReminderScheduler: ObservableObject {
                 message = type.fallbackMessages.randomElement()!
             }
 
+            var body = message
+            if settings.showHealthFacts, let entry = type.healthFacts.randomElement() {
+                body += "\n\n\(entry.fact)"
+            }
+
             notificationService.sendReminder(
                 type: type,
-                message: message,
+                message: body,
                 playSound: settings.playSounds
             )
         }
@@ -255,9 +260,14 @@ final class ReminderScheduler: ObservableObject {
                 message = type.fallbackMessages.randomElement()!
             }
 
+            var body = message
+            if settings.showHealthFacts, let entry = type.healthFacts.randomElement() {
+                body += "\n\n\(entry.fact)"
+            }
+
             notificationService.sendReminder(
                 type: type,
-                message: message,
+                message: body,
                 playSound: settings.playSounds
             )
         }

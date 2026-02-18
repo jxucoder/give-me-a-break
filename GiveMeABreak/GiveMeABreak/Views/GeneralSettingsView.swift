@@ -12,6 +12,8 @@ struct GeneralSettingsView: View {
                 ))
 
                 Toggle("Play Notification Sounds", isOn: $settingsVM.settings.playSounds)
+
+                Toggle("Show Health Facts (CDC)", isOn: $settingsVM.settings.showHealthFacts)
             }
 
             Section("Notification Permission") {
