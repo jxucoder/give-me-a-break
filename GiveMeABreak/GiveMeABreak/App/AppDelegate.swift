@@ -4,10 +4,10 @@ import UserNotifications
 final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Set the app icon programmatically so macOS picks it up for notifications
-        if let iconImage = NSImage(named: "AppIcon") {
-            NSApp.applicationIconImage = iconImage
-        }
+        // Keep the app as a regular app so macOS can always resolve the icon
+        // for dock, notifications, and Spotlight. The menu bar icon is the primary
+        // access point; the dock entry is a secondary convenience.
+        NSApp.setActivationPolicy(.regular)
 
         UNUserNotificationCenter.current().delegate = self
 

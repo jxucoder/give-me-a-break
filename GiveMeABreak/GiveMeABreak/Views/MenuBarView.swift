@@ -56,7 +56,7 @@ struct MenuBarView: View {
             }
             .padding(.bottom, 12)
         }
-        .frame(width: 280)
+        .frame(width: 340)
         .onAppear { viewModel.menuDidAppear() }
         .onDisappear { viewModel.menuDidDisappear() }
     }

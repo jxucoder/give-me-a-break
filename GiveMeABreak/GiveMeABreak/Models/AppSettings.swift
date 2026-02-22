@@ -28,7 +28,7 @@ struct AppSettings: Codable, Equatable {
         llmEnabled: false,
         llmTone: .friendly,
         customPrompt: "Write a short notification reminding someone about their break. Be original and vary your phrasing.",
-        showHealthFacts: true
+        showHealthFacts: false
     )
 
     func reminderSettings(for type: ReminderType) -> ReminderSettings {
