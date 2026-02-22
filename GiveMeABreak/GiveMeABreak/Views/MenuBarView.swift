@@ -41,12 +41,6 @@ struct MenuBarView: View {
                     .padding(.horizontal, 14)
 
                 HStack(spacing: 6) {
-                    actionButton(
-                        title: "Test",
-                        systemImage: "bell.badge",
-                        action: { viewModel.triggerTestNotification() }
-                    )
-
                     SettingsLink {
                         actionLabel(title: "Settings", systemImage: "gear")
                     }
@@ -116,8 +110,21 @@ struct MenuBarView: View {
 
                 Spacer()
 
-                // Pause / Reset / Gear buttons
+                // Pause / Reset / Test / Gear buttons
                 HStack(spacing: 4) {
+                    Button(action: { viewModel.triggerTestNotification(for: type) }) {
+                        Image(systemName: "bell.badge")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 24, height: 24)
+                            .background(
+                                Circle()
+                                    .fill(Color.primary.opacity(0.06))
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .help("Send test notification")
+
                     Button(action: { viewModel.togglePause(for: type) }) {
                         Image(systemName: viewModel.isPaused(for: type) ? "play.fill" : "pause.fill")
                             .font(.caption2)

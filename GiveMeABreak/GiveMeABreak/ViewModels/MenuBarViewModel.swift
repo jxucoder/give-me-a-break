@@ -95,9 +95,13 @@ final class MenuBarViewModel: ObservableObject {
     }
 
     private func formatTimeInterval(_ interval: TimeInterval) -> String {
-        let totalSeconds = Int(interval)
-        let minutes = totalSeconds / 60
-        let seconds = totalSeconds % 60
+        let total = Int(interval)
+        let hours = total / 3600
+        let minutes = (total % 3600) / 60
+        let seconds = total % 60
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+        }
         return String(format: "%d:%02d", minutes, seconds)
     }
 
@@ -131,9 +135,9 @@ final class MenuBarViewModel: ObservableObject {
         scheduler.skipNext(for: type, settings: settingsVM.settings)
     }
 
-    func triggerTestNotification() {
-        let type = ReminderType.allCases.first { settingsVM.isEnabled(for: $0) } ?? .breakReminder
-        scheduler.triggerTestNotification(type: type, settings: settingsVM.settings)
+    func triggerTestNotification(for type: ReminderType? = nil) {
+        let resolved = type ?? ReminderType.allCases.first { settingsVM.isEnabled(for: $0) } ?? .breakReminder
+        scheduler.triggerTestNotification(type: resolved, settings: settingsVM.settings)
     }
 
     // MARK: - Settings observation
@@ -144,9 +148,9 @@ final class MenuBarViewModel: ObservableObject {
             .receive(on: RunLoop.main)
             .sink { [weak self] newSettings in
                 guard let self else { return }
-                if !self.scheduler.isPaused {
-                    self.scheduler.configure(with: newSettings)
-                }
+                // Always reconfigure so interval changes take effect even while paused.
+                // configure() skips running timers with the same interval, so it's safe to call unconditionally.
+                self.scheduler.configure(with: newSettings)
             }
             .store(in: &cancellables)
     }

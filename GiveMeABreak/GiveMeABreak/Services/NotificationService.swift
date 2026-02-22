@@ -181,11 +181,17 @@ final class NotificationService {
         let copyURL = tempDir.appendingPathComponent("\(type.rawValue)_art_\(UUID().uuidString).png")
         do {
             try fm.copyItem(at: sourceURL, to: copyURL)
-            return try UNNotificationAttachment(
+            let attachment = try UNNotificationAttachment(
                 identifier: "reminderArt",
                 url: copyURL,
                 options: [UNNotificationAttachmentOptionsTypeHintKey: "public.png"]
             )
+            // Clean up the per-notification copy after UNUserNotificationCenter has
+            // had time to read and copy it into its own store (~30 s is ample).
+            DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+                try? FileManager.default.removeItem(at: copyURL)
+            }
+            return attachment
         } catch {
             print("Failed to create notification art attachment: \(error)")
             return nil

@@ -90,17 +90,12 @@ final class LLMService: ObservableObject {
             let response = try await session.respond(to: prompt)
             var text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
 
-            // Strip any preamble the model may still produce
-            let preambles = [
-                "Sure, here is ", "Sure, here's ", "Sure! Here is ", "Sure! Here's ",
-                "Here is ", "Here's ", "Here you go: ", "Here you go! ",
-                "Of course! ", "Of course, ", "Certainly! ", "Certainly, ",
-            ]
-            for prefix in preambles {
-                if text.hasPrefix(prefix) {
-                    text = String(text.dropFirst(prefix.count))
-                    break
-                }
+            // Strip any conversational preamble the model may still produce.
+            // Matches phrases like "Sure, here is", "Here's", "Of course!", etc.
+            // followed by a separator, case-insensitively.
+            let preamblePattern = #"^(sure[,!]?\s+|of course[,!]?\s+|certainly[,!]?\s+|here(?:'s| (?:is|you go))[:\s!]+)+"#
+            if let range = text.range(of: preamblePattern, options: [.regularExpression, .caseInsensitive]) {
+                text = String(text[range.upperBound...]).trimmingCharacters(in: .whitespacesAndNewlines)
             }
 
             // Strip wrapping quotes

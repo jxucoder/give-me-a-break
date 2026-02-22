@@ -135,9 +135,9 @@ final class ReminderScheduler: ObservableObject {
     // MARK: - Timer Management
 
     private func startTimer(for type: ReminderType, intervalMinutes: Int, initialOffset: TimeInterval, settings: AppSettings) {
-        timerStates[type]?.timer?.invalidate()
-
         guard !(timerStates[type]?.isPaused ?? false) else { return }
+
+        timerStates[type]?.timer?.invalidate()
 
         let baseInterval = TimeInterval(intervalMinutes * 60)
         let firstFire = baseInterval + initialOffset
@@ -222,8 +222,6 @@ final class ReminderScheduler: ObservableObject {
         let sinceLastNotification = now.timeIntervalSince(lastNotificationDate)
         let delay: TimeInterval = sinceLastNotification < coalescingGap ? coalescingGap - sinceLastNotification : 0
 
-        lastNotificationDate = now.addingTimeInterval(delay)
-
         Task {
             if delay > 0 {
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
@@ -240,6 +238,10 @@ final class ReminderScheduler: ObservableObject {
             if settings.showHealthFacts, let entry = type.healthFacts.randomElement() {
                 body += "\n\n\(entry.fact)"
             }
+
+            // Record delivery time right before sending so the coalescing window
+            // reflects when the notification actually fires, not when it was scheduled.
+            self.lastNotificationDate = Date()
 
             notificationService.sendReminder(
                 type: type,

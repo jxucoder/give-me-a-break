@@ -40,13 +40,7 @@ enum ReminderType: String, CaseIterable, Codable, Identifiable {
         }
     }
 
-    var defaultEnabled: Bool {
-        switch self {
-        case .breakReminder: return true
-        case .posture: return true
-        case .standSit: return true
-        }
-    }
+    var defaultEnabled: Bool { true }
 
     var fallbackMessages: [String] {
         switch self {
