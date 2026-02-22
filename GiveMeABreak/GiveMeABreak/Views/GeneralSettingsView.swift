@@ -14,6 +14,12 @@ struct GeneralSettingsView: View {
                 Toggle("Play Notification Sounds", isOn: $settingsVM.settings.playSounds)
 
                 Toggle("Show Health Facts (CDC)", isOn: $settingsVM.settings.showHealthFacts)
+
+                if settingsVM.settings.showHealthFacts {
+                    Text("Health facts are sourced from CDC publications and are for informational purposes only. This app does not provide medical advice, diagnosis, or treatment. Consult a healthcare professional for medical concerns.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Section("Notification Permission") {
@@ -24,11 +30,9 @@ struct GeneralSettingsView: View {
                 }
 
                 if settingsVM.notificationStatus.contains("Denied") {
-                    Button("Open System Settings") {
-                        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
-                            NSWorkspace.shared.open(url)
-                        }
-                    }
+                    Text("Enable notifications in System Settings > Notifications > Give Me A Break")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
         }

@@ -22,5 +22,7 @@
     <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>
     <string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2026 jxucoder. All rights reserved.</string>
 </dict>
 </plist>

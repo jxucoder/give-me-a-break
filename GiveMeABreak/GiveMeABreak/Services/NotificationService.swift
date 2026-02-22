@@ -1,10 +1,13 @@
 import Foundation
 import AppKit
 import UserNotifications
+import os.log
 
 @MainActor
 final class NotificationService {
     static let shared = NotificationService()
+
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.givemeabreak.app", category: "NotificationService")
 
     private var center: UNUserNotificationCenter { UNUserNotificationCenter.current() }
 
@@ -23,7 +26,7 @@ final class NotificationService {
             }
             return granted
         } catch {
-            print("Notification authorization error: \(error)")
+            Self.logger.error("Notification authorization error: \(error.localizedDescription)")
             return false
         }
     }
@@ -92,7 +95,7 @@ final class NotificationService {
 
         center.add(request) { error in
             if let error {
-                print("Failed to send notification: \(error)")
+                Self.logger.error("Failed to send notification: \(error.localizedDescription)")
             }
         }
     }
@@ -127,7 +130,7 @@ final class NotificationService {
 
         center.add(request) { error in
             if let error {
-                print("Failed to schedule snooze: \(error)")
+                Self.logger.error("Failed to schedule snooze: \(error.localizedDescription)")
             }
         }
     }
@@ -155,13 +158,13 @@ final class NotificationService {
             guard let image = NSImage(named: artAssetName(for: type)) else { return nil }
 
             let size = NSSize(width: 256, height: 256)
-            let resized = NSImage(size: size)
-            resized.lockFocus()
-            image.draw(in: NSRect(origin: .zero, size: size),
-                       from: NSRect(origin: .zero, size: image.size),
-                       operation: .copy,
-                       fraction: 1.0)
-            resized.unlockFocus()
+            let resized = NSImage(size: size, flipped: false) { rect in
+                image.draw(in: rect,
+                           from: NSRect(origin: .zero, size: image.size),
+                           operation: .copy,
+                           fraction: 1.0)
+                return true
+            }
 
             guard let tiff = resized.tiffRepresentation,
                   let bitmap = NSBitmapImageRep(data: tiff),
@@ -173,7 +176,7 @@ final class NotificationService {
                 cachedArtURLs[type] = masterURL
                 sourceURL = masterURL
             } catch {
-                print("Failed to write notification art: \(error)")
+                Self.logger.error("Failed to write notification art: \(error.localizedDescription)")
                 return nil
             }
         }
@@ -193,7 +196,7 @@ final class NotificationService {
             }
             return attachment
         } catch {
-            print("Failed to create notification art attachment: \(error)")
+            Self.logger.error("Failed to create notification art attachment: \(error.localizedDescription)")
             return nil
         }
     }

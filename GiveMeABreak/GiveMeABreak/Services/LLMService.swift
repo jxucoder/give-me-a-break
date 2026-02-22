@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import os.log
 
 #if canImport(FoundationModels)
 import FoundationModels
@@ -10,6 +11,8 @@ import FoundationModels
 @MainActor
 final class LLMService: ObservableObject {
     static let shared = LLMService()
+
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.givemeabreak.app", category: "LLMService")
 
     enum ModelState: Equatable {
         case available
@@ -109,7 +112,7 @@ final class LLMService: ObservableObject {
             }
             return text
         } catch {
-            print("Foundation Models error: \(error)")
+            Self.logger.error("Foundation Models error: \(error.localizedDescription)")
             return type.fallbackMessages.randomElement()!
         }
         #else

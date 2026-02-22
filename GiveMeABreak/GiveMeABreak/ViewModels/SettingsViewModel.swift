@@ -1,11 +1,13 @@
 import Foundation
 import Combine
 import ServiceManagement
+import os.log
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
     static let shared = SettingsViewModel()
 
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.givemeabreak.app", category: "SettingsViewModel")
     private static let settingsKey = "appSettings"
 
     @Published var settings: AppSettings {
@@ -49,7 +51,7 @@ final class SettingsViewModel: ObservableObject {
             }
             settings.launchAtLogin = enabled
         } catch {
-            print("Failed to toggle launch at login: \(error)")
+            Self.logger.error("Failed to toggle launch at login: \(error.localizedDescription)")
             settings.launchAtLogin = SMAppService.mainApp.status == .enabled
         }
     }
