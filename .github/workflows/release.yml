@@ -1,0 +1,138 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  SCHEME: GiveMeABreak
+  PROJECT_DIR: GiveMeABreak
+  APP_NAME: "Give Me A Break"
+
+jobs:
+  build-and-release:
+    name: Build, Sign, Notarize & Release
+    runs-on: macos-15
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Install signing certificate
+        env:
+          CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+        run: |
+          CERT_PATH="$RUNNER_TEMP/certificate.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 32)"
+
+          echo "$CERTIFICATE_P12" | base64 --decode -o "$CERT_PATH"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          security import "$CERT_PATH" \
+            -P "$CERTIFICATE_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" login.keychain-db
+
+      - name: Prepare ExportOptions plists
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          sed -i '' "s/__TEAM_ID__/$APPLE_TEAM_ID/g" "$PROJECT_DIR/ExportOptions-DirectDistribution.plist"
+          sed -i '' "s/__TEAM_ID__/$APPLE_TEAM_ID/g" "$PROJECT_DIR/ExportOptions-AppStore.plist"
+
+      - name: Build archive
+        run: |
+          xcodebuild archive \
+            -project "$PROJECT_DIR/$SCHEME.xcodeproj" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -archivePath "$RUNNER_TEMP/$SCHEME.xcarchive" \
+            MARKETING_VERSION="${{ steps.version.outputs.VERSION }}" \
+            -quiet
+
+      # ── GitHub Releases (Developer ID) ──
+
+      - name: Export for direct distribution
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/$SCHEME.xcarchive" \
+            -exportPath "$RUNNER_TEMP/direct" \
+            -exportOptionsPlist "$PROJECT_DIR/ExportOptions-DirectDistribution.plist"
+
+      - name: Create ZIP
+        run: |
+          cd "$RUNNER_TEMP/direct"
+          ditto -c -k --keepParent "$APP_NAME.app" "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
+
+      - name: Notarize
+        env:
+          NOTARY_APPLE_ID: ${{ secrets.NOTARY_APPLE_ID }}
+          NOTARY_PASSWORD: ${{ secrets.NOTARY_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          xcrun notarytool submit \
+            "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip" \
+            --apple-id "$NOTARY_APPLE_ID" \
+            --password "$NOTARY_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+
+          xcrun stapler staple "$RUNNER_TEMP/direct/$APP_NAME.app"
+
+          # Re-zip after stapling
+          cd "$RUNNER_TEMP/direct"
+          ditto -c -k --keepParent "$APP_NAME.app" "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes
+
+      # ── Mac App Store ──
+
+      - name: Export for App Store
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/$SCHEME.xcarchive" \
+            -exportPath "$RUNNER_TEMP/appstore" \
+            -exportOptionsPlist "$PROJECT_DIR/ExportOptions-AppStore.plist"
+
+      - name: Upload to App Store Connect
+        env:
+          NOTARY_APPLE_ID: ${{ secrets.NOTARY_APPLE_ID }}
+          NOTARY_PASSWORD: ${{ secrets.NOTARY_PASSWORD }}
+        run: |
+          xcrun altool --upload-app \
+            -f "$RUNNER_TEMP/appstore/$SCHEME.pkg" \
+            -t macos \
+            -u "$NOTARY_APPLE_ID" \
+            -p "$NOTARY_PASSWORD" \
+            --verbose
+
+      - name: Clean up keychain
+        if: always()
+        run: security delete-keychain "$RUNNER_TEMP/build.keychain-db" 2>/dev/null || true
