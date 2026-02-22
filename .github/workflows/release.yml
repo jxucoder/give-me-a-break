@@ -53,12 +53,11 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security list-keychains -d user -s "$KEYCHAIN_PATH" login.keychain-db
 
-      - name: Prepare ExportOptions plists
+      - name: Prepare ExportOptions plist
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           sed -i '' "s/__TEAM_ID__/$APPLE_TEAM_ID/g" "$PROJECT_DIR/ExportOptions-DirectDistribution.plist"
-          sed -i '' "s/__TEAM_ID__/$APPLE_TEAM_ID/g" "$PROJECT_DIR/ExportOptions-AppStore.plist"
 
       - name: Build archive
         run: |
@@ -111,27 +110,6 @@ jobs:
             "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip" \
             --title "$GITHUB_REF_NAME" \
             --generate-notes
-
-      # ── Mac App Store ──
-
-      - name: Export for App Store
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath "$RUNNER_TEMP/$SCHEME.xcarchive" \
-            -exportPath "$RUNNER_TEMP/appstore" \
-            -exportOptionsPlist "$PROJECT_DIR/ExportOptions-AppStore.plist"
-
-      - name: Upload to App Store Connect
-        env:
-          NOTARY_APPLE_ID: ${{ secrets.NOTARY_APPLE_ID }}
-          NOTARY_PASSWORD: ${{ secrets.NOTARY_PASSWORD }}
-        run: |
-          xcrun altool --upload-app \
-            -f "$RUNNER_TEMP/appstore/$SCHEME.pkg" \
-            -t macos \
-            -u "$NOTARY_APPLE_ID" \
-            -p "$NOTARY_PASSWORD" \
-            --verbose
 
       - name: Clean up keychain
         if: always()
