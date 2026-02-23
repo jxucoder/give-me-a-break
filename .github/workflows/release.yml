@@ -111,6 +111,49 @@ jobs:
             --title "$GITHUB_REF_NAME" \
             --generate-notes
 
+      # ── Sparkle Appcast ──
+
+      - name: Generate Sparkle appcast
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SPARKLE_BIN="${{ github.workspace }}/$PROJECT_DIR/build/SourcePackages/artifacts/sparkle/Sparkle/bin"
+          ZIP_PATH="$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
+          DOWNLOAD_URL="https://github.com/jxucoder/give-me-a-break/releases/download/$GITHUB_REF_NAME/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
+
+          xcodebuild -resolvePackageDependencies -project "$PROJECT_DIR/$SCHEME.xcodeproj" -quiet
+
+          LENGTH=$(stat -f%z "$ZIP_PATH")
+          SIG=$(echo "$SPARKLE_PRIVATE_KEY" | "$SPARKLE_BIN/sign_update" "$ZIP_PATH" --ed-key-file -)
+
+          cat > "$RUNNER_TEMP/appcast.xml" <<APPCAST
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>Give Me A Break</title>
+              <link>https://jxucoder.github.io/give-me-a-break/appcast.xml</link>
+              <item>
+                <title>Version ${{ steps.version.outputs.VERSION }}</title>
+                <pubDate>$(date -R)</pubDate>
+                <sparkle:version>${{ steps.version.outputs.VERSION }}</sparkle:version>
+                <sparkle:shortVersionString>${{ steps.version.outputs.VERSION }}</sparkle:shortVersionString>
+                <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+                <enclosure url="$DOWNLOAD_URL" length="$LENGTH" type="application/octet-stream" $SIG />
+              </item>
+            </channel>
+          </rss>
+          APPCAST
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout main
+          cp "$RUNNER_TEMP/appcast.xml" docs/appcast.xml
+          git add docs/appcast.xml
+          git commit -m "Update appcast.xml for $GITHUB_REF_NAME" || true
+          git push origin main
+
       - name: Clean up keychain
         if: always()
         run: security delete-keychain "$RUNNER_TEMP/build.keychain-db" 2>/dev/null || true

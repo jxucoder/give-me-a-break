@@ -1,9 +1,12 @@
 import SwiftUI
+import Sparkle
 
 struct SettingsView: View {
+    let updater: SPUUpdater
+
     var body: some View {
         TabView {
-            GeneralSettingsView()
+            GeneralSettingsView(updater: updater)
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
