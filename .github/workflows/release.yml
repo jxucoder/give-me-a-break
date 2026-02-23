@@ -84,30 +84,18 @@ jobs:
           ditto -c -k --keepParent "$APP_NAME.app" "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
 
       - name: Notarize
-        timeout-minutes: 30
+        timeout-minutes: 90
         env:
           NOTARY_APPLE_ID: ${{ secrets.NOTARY_APPLE_ID }}
           NOTARY_PASSWORD: ${{ secrets.NOTARY_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          for attempt in 1 2 3; do
-            echo "Notarization attempt $attempt..."
-            if xcrun notarytool submit \
-              "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip" \
-              --apple-id "$NOTARY_APPLE_ID" \
-              --password "$NOTARY_PASSWORD" \
-              --team-id "$APPLE_TEAM_ID" \
-              --wait --timeout 15m; then
-              echo "Notarization succeeded."
-              break
-            fi
-            if [ "$attempt" -eq 3 ]; then
-              echo "Notarization failed after 3 attempts."
-              exit 1
-            fi
-            echo "Retrying in 30 seconds..."
-            sleep 30
-          done
+          xcrun notarytool submit \
+            "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip" \
+            --apple-id "$NOTARY_APPLE_ID" \
+            --password "$NOTARY_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait --timeout 60m
 
           xcrun stapler staple "$RUNNER_TEMP/direct/$APP_NAME.app"
 
