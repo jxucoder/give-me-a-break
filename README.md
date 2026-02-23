@@ -43,9 +43,10 @@ Each reminder runs on its own independent timer with its own interval (5 min to 
 
 The app checks for updates automatically via [Sparkle](https://sparkle-project.org/). You can also check manually in Settings > General > Check for Updates.
 
-### Homebrew (coming soon)
+### Homebrew
 
 ```bash
+brew tap jxucoder/tap
 brew install --cask give-me-a-break
 ```
 
