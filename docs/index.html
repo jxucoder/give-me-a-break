@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Give Me A Break — macOS Break Reminder</title>
+    <meta name="description" content="A lightweight macOS menu bar app that reminds you to take breaks, fix your posture, and alternate between standing and sitting.">
+    <meta property="og:title" content="Give Me A Break">
+    <meta property="og:description" content="A lightweight macOS menu bar app that reminds you to take breaks, fix your posture, and alternate between standing and sitting.">
+    <meta property="og:image" content="screenshot.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --border: #222;
+            --text: #e8e8e8;
+            --text-secondary: #888;
+            --accent: #2dd4bf;
+            --accent-hover: #5eead4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 0 48px;
+        }
+
+        .hero-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 0 auto 36px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: #0a0a0a;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .download-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .download-meta {
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Screenshot */
+        .screenshot-section {
+            text-align: center;
+            padding: 32px 0 64px;
+        }
+
+        .screenshot-section img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+        }
+
+        /* Features */
+        .features {
+            padding: 64px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 48px;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .feature-icon {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Privacy */
+        .privacy {
+            padding: 64px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .privacy h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .privacy p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 48px 0 32px; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero p { font-size: 1rem; }
+            .features h2, .privacy h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <section class="hero">
+            <img src="logo.png" alt="Give Me A Break" class="hero-logo">
+            <h1>Give Me A Break</h1>
+            <p>A lightweight macOS menu bar app that reminds you to take breaks, fix your posture, and switch between standing and sitting.</p>
+            <a href="https://github.com/jxucoder/give-me-a-break/releases/latest" class="download-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                Download for macOS
+            </a>
+            <div class="download-meta">Requires macOS 14 (Sonoma) or later &middot; Free &middot; Open Source</div>
+        </section>
+
+        <section class="screenshot-section">
+            <img src="screenshot.png" alt="Give Me A Break screenshot showing menu bar timers and a posture check notification">
+        </section>
+
+        <section class="features">
+            <h2>Built for your wellbeing</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#9749;</div>
+                    <h3>Break Reminders</h3>
+                    <p>Step away from the screen, rest your eyes, and stretch your legs on a schedule that works for you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#129497;</div>
+                    <h3>Posture Checks</h3>
+                    <p>Gentle nudges to sit up straight, relax your shoulders, and unclench your jaw.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#8693;</div>
+                    <h3>Stand / Sit</h3>
+                    <p>Alternate between standing and sitting to reduce fatigue and keep your body moving.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#9881;</div>
+                    <h3>Fully Customizable</h3>
+                    <p>Set intervals from 5 minutes to 2 hours. Pause, resume, or reset any timer from the menu bar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#129504;</div>
+                    <h3>AI Messages</h3>
+                    <p>Optional Apple Intelligence integration for varied, natural reminder text — entirely on-device.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128274;</div>
+                    <h3>Privacy First</h3>
+                    <p>Zero network requests. No accounts. No tracking. Everything stays on your Mac.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="privacy">
+            <h2>Your data stays on your Mac</h2>
+            <p>Give Me A Break makes zero network requests. All settings are stored locally. If you enable AI messages, they're generated entirely on-device using Apple Intelligence.</p>
+        </section>
+
+        <footer>
+            <p>
+                Made by <a href="https://github.com/jxucoder">jxucoder</a> &middot;
+                <a href="https://github.com/jxucoder/give-me-a-break">Source Code</a> &middot;
+                Apache 2.0 License
+            </p>
+        </footer>
+
+    </div>
+</body>
+</html>
