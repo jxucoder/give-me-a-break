@@ -139,58 +139,25 @@ final class ReminderScheduler: ObservableObject {
 
         timerStates[type]?.timer?.invalidate()
 
-        let baseInterval = TimeInterval(intervalMinutes * 60)
-        let firstFire = baseInterval + initialOffset
-        let fireDate = Date().addingTimeInterval(firstFire)
-
-        let timer = Timer(timeInterval: firstFire, repeats: false) { [weak self] _ in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                self.timerFired(for: type, settings: settings)
-                self.scheduleRepeating(for: type, intervalMinutes: intervalMinutes, settings: settings)
-            }
-        }
-
-        RunLoop.main.add(timer, forMode: .common)
-
-        timerStates[type] = TimerState(
-            isActive: true,
-            fireDate: fireDate,
-            timer: timer,
-            intervalMinutes: intervalMinutes
-        )
+        let firstFire = TimeInterval(intervalMinutes * 60) + initialOffset
+        scheduleNext(for: type, delay: firstFire, intervalMinutes: intervalMinutes, settings: settings)
     }
 
     private func resumeTimer(for type: ReminderType, remaining: TimeInterval, intervalMinutes: Int, settings: AppSettings) {
-        let fireDate = Date().addingTimeInterval(remaining)
+        scheduleNext(for: type, delay: remaining, intervalMinutes: intervalMinutes, settings: settings)
+    }
 
-        let timer = Timer(timeInterval: remaining, repeats: false) { [weak self] _ in
+    private func scheduleNext(for type: ReminderType, delay: TimeInterval, intervalMinutes: Int, settings: AppSettings) {
+        guard !(timerStates[type]?.isPaused ?? false) else { return }
+
+        let fireDate = Date().addingTimeInterval(delay)
+
+        let timer = Timer(timeInterval: delay, repeats: false) { [weak self] _ in
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 self.timerFired(for: type, settings: settings)
-                self.scheduleRepeating(for: type, intervalMinutes: intervalMinutes, settings: settings)
-            }
-        }
-
-        RunLoop.main.add(timer, forMode: .common)
-
-        timerStates[type] = TimerState(
-            isActive: true,
-            fireDate: fireDate,
-            timer: timer,
-            intervalMinutes: intervalMinutes
-        )
-    }
-
-    private func scheduleRepeating(for type: ReminderType, intervalMinutes: Int, settings: AppSettings) {
-        guard !(timerStates[type]?.isPaused ?? false) else { return }
-
-        let interval = TimeInterval(intervalMinutes * 60)
-        let fireDate = Date().addingTimeInterval(interval)
-
-        let timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
-            Task { @MainActor [weak self] in
-                self?.timerFired(for: type, settings: settings)
+                let nextInterval = TimeInterval(intervalMinutes * 60)
+                self.scheduleNext(for: type, delay: nextInterval, intervalMinutes: intervalMinutes, settings: settings)
             }
         }
 

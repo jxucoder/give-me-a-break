@@ -69,44 +69,52 @@ struct MenuBarView: View {
         return VStack(spacing: 6) {
             // Top row: ring + name + countdown + skip
             HStack(spacing: 10) {
-                // Progress ring
-                ZStack {
-                    Circle()
-                        .stroke(type.tintColor.opacity(0.15), lineWidth: 3)
-
-                    Circle()
-                        .trim(from: 0, to: viewModel.timerProgress[type] ?? 0)
-                        .stroke(type.tintColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                        .animation(.linear(duration: 1), value: viewModel.timerProgress[type])
-
-                    Image(systemName: type.icon)
-                        .font(.system(size: 11))
-                        .foregroundStyle(type.tintColor)
-                }
-                .frame(width: 30, height: 30)
-
-                // Name + countdown
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(type.displayName)
-                        .font(.subheadline.weight(.medium))
-
-                    if viewModel.isPaused(for: type) {
-                        if let timeString = viewModel.displayTimers[type] {
-                            Text("\(timeString) — Paused")
-                                .font(.caption.monospacedDigit())
-                                .foregroundStyle(.orange)
-                        } else {
-                            Text("Paused")
-                                .font(.caption)
-                                .foregroundStyle(.orange)
-                        }
-                    } else if let timeString = viewModel.displayTimers[type] {
-                        Text(timeString)
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(type.tintColor)
+                Button(action: {
+                    withAnimation(.snappy(duration: 0.2)) {
+                        expandedSlider = expandedSlider == type ? nil : type
                     }
+                }) {
+                    HStack(spacing: 10) {
+                        ZStack {
+                            Circle()
+                                .stroke(type.tintColor.opacity(0.15), lineWidth: 3)
+
+                            Circle()
+                                .trim(from: 0, to: viewModel.timerProgress[type] ?? 0)
+                                .stroke(type.tintColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                                .rotationEffect(.degrees(-90))
+                                .animation(.linear(duration: 1), value: viewModel.timerProgress[type])
+
+                            Image(systemName: type.icon)
+                                .font(.system(size: 11))
+                                .foregroundStyle(type.tintColor)
+                        }
+                        .frame(width: 30, height: 30)
+
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(type.displayName)
+                                .font(.subheadline.weight(.medium))
+
+                            if viewModel.isPaused(for: type) {
+                                if let timeString = viewModel.displayTimers[type] {
+                                    Text("\(timeString) — Paused")
+                                        .font(.caption.monospacedDigit())
+                                        .foregroundStyle(.orange)
+                                } else {
+                                    Text("Paused")
+                                        .font(.caption)
+                                        .foregroundStyle(.orange)
+                                }
+                            } else if let timeString = viewModel.displayTimers[type] {
+                                Text(timeString)
+                                    .font(.caption.monospacedDigit())
+                                    .foregroundStyle(type.tintColor)
+                            }
+                        }
+                    }
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
 
                 Spacer()
 
