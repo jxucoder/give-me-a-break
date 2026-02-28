@@ -33,6 +33,32 @@ struct LLMSettingsView: View {
             }
 
             if settingsVM.settings.llmEnabled {
+                Section("Prompt Preview") {
+                    let tone = settingsVM.settings.llmTone
+                    let custom = settingsVM.settings.customPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("System Instructions")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Text("You are a notification message generator. Output ONLY the notification text itself — nothing else. Never include preamble, quotes, emojis, hashtags, or labels. 1-2 sentences max, under 120 characters. Be \(tone.promptDescription).")
+                            .font(.caption)
+                            .foregroundStyle(.primary)
+
+                        Divider()
+
+                        Text("User Prompt (per notification)")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Text("\(custom.isEmpty ? "(no custom prompt)" : custom) The reminder type is: [Take a Break / Check Posture / Stand or Sit]. Output only the reminder text.")
+                            .font(.caption)
+                            .foregroundStyle(.primary)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+
+            if settingsVM.settings.llmEnabled {
                 Section("On-Device Model") {
                     modelStatusView
 
