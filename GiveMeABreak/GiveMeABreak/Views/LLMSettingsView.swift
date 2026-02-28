@@ -7,15 +7,41 @@ struct LLMSettingsView: View {
     var body: some View {
         Form {
             Section {
-                Toggle("Enable AI-Generated Messages", isOn: $settingsVM.settings.llmEnabled)
+                Toggle(isOn: $settingsVM.settings.llmEnabled) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "sparkles")
+                            .foregroundStyle(.purple)
+                        Text("Enable AI-Generated Messages")
+                    }
+                }
+                .tint(.purple)
 
                 if settingsVM.settings.llmEnabled {
-                    Picker("Tone:", selection: $settingsVM.settings.llmTone) {
-                        ForEach(LLMTone.allCases) { tone in
-                            Text(tone.displayName).tag(tone)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Tone:")
+                            .font(.subheadline)
+                        HStack(spacing: 8) {
+                            ForEach(LLMTone.allCases) { tone in
+                                let isSelected = settingsVM.settings.llmTone == tone
+                                Button(action: { settingsVM.settings.llmTone = tone }) {
+                                    HStack(spacing: 5) {
+                                        Image(systemName: tone.icon)
+                                            .font(.caption)
+                                        Text(tone.displayName)
+                                            .font(.caption.weight(.medium))
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        Capsule()
+                                            .fill(isSelected ? tone.tintColor : tone.tintColor.opacity(0.1))
+                                    )
+                                    .foregroundStyle(isSelected ? .white : tone.tintColor)
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
-                    .pickerStyle(.segmented)
                 }
             }
 

@@ -16,6 +16,6 @@ struct SettingsView: View {
                     Label("AI Messages", systemImage: "brain")
                 }
         }
-        .frame(width: 420, height: 520)
+        .frame(width: 520, height: 520)
     }
 }

@@ -41,14 +41,19 @@ struct MenuBarView: View {
                     .padding(.horizontal, 14)
 
                 HStack(spacing: 6) {
-                    actionButton(
-                        title: "Settings",
-                        systemImage: "gear",
-                        action: {
+                    SettingsLink {
+                        actionLabel(title: "Settings", systemImage: "gear")
+                    }
+                    .buttonStyle(ActionChipButtonStyle())
+                    .simultaneousGesture(TapGesture().onEnded {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             NSApp.activate(ignoringOtherApps: true)
-                            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                            for window in NSApp.windows where window.isVisible {
+                                window.collectionBehavior.insert(.canJoinAllSpaces)
+                                window.orderFrontRegardless()
+                            }
                         }
-                    )
+                    })
 
                     actionButton(
                         title: "Quit",
@@ -177,10 +182,10 @@ struct MenuBarView: View {
                             .foregroundStyle(.tertiary)
 
                         let mins = Int(currentInterval)
-                        Text(mins >= 60 ? "\(mins / 60)h\(mins % 60 > 0 ? "\(mins % 60)m" : "")" : "\(mins)m")
+                        Text(mins >= 60 ? "\(mins / 60)h\(mins % 60 > 0 ? " \(mins % 60)m" : "")" : "\(mins)m")
                             .font(.system(size: 10, weight: .semibold).monospacedDigit())
                             .foregroundStyle(type.tintColor)
-                            .frame(width: 34, alignment: .trailing)
+                            .fixedSize()
                     }
 
                     Picker("Display", selection: Binding(

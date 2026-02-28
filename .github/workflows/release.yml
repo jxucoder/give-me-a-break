@@ -129,7 +129,7 @@ jobs:
           SIGN_UPDATE="$RUNNER_TEMP/sparkle/bin/sign_update"
 
           LENGTH=$(stat -f%z "$ZIP_PATH")
-          SIG=$(echo "$SPARKLE_PRIVATE_KEY" | "$SIGN_UPDATE" "$ZIP_PATH" --ed-key-file -)
+          SIG_ATTR=$(echo "$SPARKLE_PRIVATE_KEY" | "$SIGN_UPDATE" "$ZIP_PATH" --ed-key-file - | grep -o 'sparkle:edSignature="[^"]*"')
           PUBDATE=$(date -R)
 
           cat > "$RUNNER_TEMP/appcast.xml" <<EOF
@@ -144,7 +144,7 @@ jobs:
                 <sparkle:version>${{ steps.version.outputs.VERSION }}</sparkle:version>
                 <sparkle:shortVersionString>${{ steps.version.outputs.VERSION }}</sparkle:shortVersionString>
                 <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-                <enclosure url="${DOWNLOAD_URL}" length="${LENGTH}" type="application/octet-stream" ${SIG} />
+                <enclosure url="${DOWNLOAD_URL}" length="${LENGTH}" type="application/octet-stream" ${SIG_ATTR} />
               </item>
             </channel>
           </rss>

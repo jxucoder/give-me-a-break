@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 enum ReminderDisplayMode: String, Codable, CaseIterable, Identifiable {
     case notification
@@ -78,6 +79,24 @@ enum LLMTone: String, Codable, CaseIterable, Identifiable {
         case .humorous: return "Humorous"
         case .professional: return "Professional"
         case .motivational: return "Motivational"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .friendly: return "face.smiling"
+        case .humorous: return "theatermasks"
+        case .professional: return "briefcase"
+        case .motivational: return "flame"
+        }
+    }
+
+    var tintColor: Color {
+        switch self {
+        case .friendly: return .teal
+        case .humorous: return .orange
+        case .professional: return .blue
+        case .motivational: return .red
         }
     }
 

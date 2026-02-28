@@ -13,16 +13,10 @@ struct GeneralSettingsView: View {
                     get: { settingsVM.settings.launchAtLogin },
                     set: { settingsVM.toggleLaunchAtLogin($0) }
                 ))
+                .tint(.blue)
 
                 Toggle("Play Notification Sounds", isOn: $settingsVM.settings.playSounds)
-
-                Toggle("Show Health Facts (CDC)", isOn: $settingsVM.settings.showHealthFacts)
-
-                if settingsVM.settings.showHealthFacts {
-                    Text("Health facts are sourced from CDC publications and are for informational purposes only. This app does not provide medical advice, diagnosis, or treatment. Consult a healthcare professional for medical concerns.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                    .tint(.blue)
             }
 
             Section("Overlay Reminders") {
@@ -53,6 +47,7 @@ struct GeneralSettingsView: View {
                     get: { updater.automaticallyChecksForUpdates },
                     set: { updater.automaticallyChecksForUpdates = $0 }
                 ))
+                .tint(.blue)
 
                 Button("Check for Updates...") {
                     updater.checkForUpdates()

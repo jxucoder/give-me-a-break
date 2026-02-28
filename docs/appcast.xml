@@ -9,7 +9,7 @@
       <sparkle:version>1.3.0</sparkle:version>
       <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <enclosure url="https://github.com/jxucoder/give-me-a-break/releases/download/v1.3.0/GiveMeABreak-1.3.0.zip" length="16369449" type="application/octet-stream" sparkle:edSignature="5a3d6XIdqJzscdqY26fHw0sVyLQ8AR73U5s2S99zAeQxnykOFQDbXirPKl7spqEBGpa8gDaEg4mxjyizUmuzDw==" length="16369449" />
+      <enclosure url="https://github.com/jxucoder/give-me-a-break/releases/download/v1.3.0/GiveMeABreak-1.3.0.zip" length="16369449" type="application/octet-stream" sparkle:edSignature="5a3d6XIdqJzscdqY26fHw0sVyLQ8AR73U5s2S99zAeQxnykOFQDbXirPKl7spqEBGpa8gDaEg4mxjyizUmuzDw==" />
     </item>
   </channel>
 </rss>
