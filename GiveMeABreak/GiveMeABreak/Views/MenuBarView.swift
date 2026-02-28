@@ -41,10 +41,14 @@ struct MenuBarView: View {
                     .padding(.horizontal, 14)
 
                 HStack(spacing: 6) {
-                    SettingsLink {
-                        actionLabel(title: "Settings", systemImage: "gear")
-                    }
-                    .buttonStyle(ActionChipButtonStyle())
+                    actionButton(
+                        title: "Settings",
+                        systemImage: "gear",
+                        action: {
+                            NSApp.activate(ignoringOtherApps: true)
+                            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                        }
+                    )
 
                     actionButton(
                         title: "Quit",
@@ -67,58 +71,46 @@ struct MenuBarView: View {
         let currentInterval = Double(settingsVM.interval(for: type))
 
         return VStack(spacing: 6) {
-            // Top row: ring + name + countdown + skip
             HStack(spacing: 10) {
-                Button(action: {
-                    withAnimation(.snappy(duration: 0.2)) {
-                        expandedSlider = expandedSlider == type ? nil : type
-                    }
-                }) {
-                    HStack(spacing: 10) {
-                        ZStack {
-                            Circle()
-                                .stroke(type.tintColor.opacity(0.15), lineWidth: 3)
+                ZStack {
+                    Circle()
+                        .stroke(type.tintColor.opacity(0.15), lineWidth: 3)
 
-                            Circle()
-                                .trim(from: 0, to: viewModel.timerProgress[type] ?? 0)
-                                .stroke(type.tintColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                                .rotationEffect(.degrees(-90))
-                                .animation(.linear(duration: 1), value: viewModel.timerProgress[type])
+                    Circle()
+                        .trim(from: 0, to: viewModel.timerProgress[type] ?? 0)
+                        .stroke(type.tintColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear(duration: 1), value: viewModel.timerProgress[type])
 
-                            Image(systemName: type.icon)
-                                .font(.system(size: 11))
-                                .foregroundStyle(type.tintColor)
-                        }
-                        .frame(width: 30, height: 30)
-
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(type.displayName)
-                                .font(.subheadline.weight(.medium))
-
-                            if viewModel.isPaused(for: type) {
-                                if let timeString = viewModel.displayTimers[type] {
-                                    Text("\(timeString) — Paused")
-                                        .font(.caption.monospacedDigit())
-                                        .foregroundStyle(.orange)
-                                } else {
-                                    Text("Paused")
-                                        .font(.caption)
-                                        .foregroundStyle(.orange)
-                                }
-                            } else if let timeString = viewModel.displayTimers[type] {
-                                Text(timeString)
-                                    .font(.caption.monospacedDigit())
-                                    .foregroundStyle(type.tintColor)
-                            }
-                        }
-                    }
-                    .contentShape(Rectangle())
+                    Image(systemName: type.icon)
+                        .font(.system(size: 11))
+                        .foregroundStyle(type.tintColor)
                 }
-                .buttonStyle(.plain)
+                .frame(width: 30, height: 30)
+
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(type.displayName)
+                        .font(.subheadline.weight(.medium))
+
+                    if viewModel.isPaused(for: type) {
+                        if let timeString = viewModel.displayTimers[type] {
+                            Text("\(timeString) — Paused")
+                                .font(.caption.monospacedDigit())
+                                .foregroundStyle(.orange)
+                        } else {
+                            Text("Paused")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        }
+                    } else if let timeString = viewModel.displayTimers[type] {
+                        Text(timeString)
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(type.tintColor)
+                    }
+                }
 
                 Spacer()
 
-                // Pause / Reset / Test / Gear buttons
                 HStack(spacing: 4) {
                     Button(action: { viewModel.triggerTestNotification(for: type) }) {
                         Image(systemName: "bell.badge")
@@ -160,60 +152,58 @@ struct MenuBarView: View {
                     }
                     .buttonStyle(.plain)
                     .help("Reset timer")
-
-                    Button(action: {
-                        withAnimation(.snappy(duration: 0.2)) {
-                            expandedSlider = expandedSlider == type ? nil : type
-                        }
-                    }) {
-                        Image(systemName: "gearshape")
-                            .font(.caption2)
-                            .foregroundStyle(expandedSlider == type ? type.tintColor : .secondary)
-                            .frame(width: 24, height: 24)
-                            .background(
-                                Circle()
-                                    .fill(expandedSlider == type
-                                          ? type.tintColor.opacity(0.15)
-                                          : Color.primary.opacity(0.06))
-                            )
-                    }
-                    .buttonStyle(.plain)
-                    .help("Adjust interval")
                 }
             }
 
-            // Interval slider (shown when reset is tapped)
             if expandedSlider == type {
-                HStack(spacing: 6) {
-                    Text("5m")
-                        .font(.system(size: 9, weight: .medium))
-                        .foregroundStyle(.tertiary)
+                VStack(spacing: 8) {
+                    HStack(spacing: 6) {
+                        Text("5m")
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundStyle(.tertiary)
 
-                    Slider(
-                        value: Binding(
-                            get: { currentInterval },
-                            set: { settingsVM.setInterval(Int($0), for: type) }
-                        ),
-                        in: 5...120,
-                        step: 5
-                    )
-                    .tint(type.tintColor)
+                        Slider(
+                            value: Binding(
+                                get: { currentInterval },
+                                set: { settingsVM.setInterval(Int($0), for: type) }
+                            ),
+                            in: 5...120,
+                            step: 5
+                        )
+                        .tint(type.tintColor)
 
-                    Text("2h")
-                        .font(.system(size: 9, weight: .medium))
-                        .foregroundStyle(.tertiary)
+                        Text("2h")
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundStyle(.tertiary)
 
-                    let mins = Int(currentInterval)
-                    Text(mins >= 60 ? "\(mins / 60)h\(mins % 60 > 0 ? "\(mins % 60)m" : "")" : "\(mins)m")
-                        .font(.system(size: 10, weight: .semibold).monospacedDigit())
-                        .foregroundStyle(type.tintColor)
-                        .frame(width: 34, alignment: .trailing)
+                        let mins = Int(currentInterval)
+                        Text(mins >= 60 ? "\(mins / 60)h\(mins % 60 > 0 ? "\(mins % 60)m" : "")" : "\(mins)m")
+                            .font(.system(size: 10, weight: .semibold).monospacedDigit())
+                            .foregroundStyle(type.tintColor)
+                            .frame(width: 34, alignment: .trailing)
+                    }
+
+                    Picker("Display", selection: Binding(
+                        get: { settingsVM.displayMode(for: type) },
+                        set: { settingsVM.setDisplayMode($0, for: type) }
+                    )) {
+                        ForEach(ReminderDisplayMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation(.snappy(duration: 0.2)) {
+                expandedSlider = expandedSlider == type ? nil : type
+            }
+        }
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.primary.opacity(0.04))

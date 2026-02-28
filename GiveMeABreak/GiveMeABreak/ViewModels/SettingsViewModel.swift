@@ -78,6 +78,16 @@ final class SettingsViewModel: ObservableObject {
         settings.reminders[type.rawValue] = reminder
     }
 
+    func displayMode(for type: ReminderType) -> ReminderDisplayMode {
+        settings.reminderSettings(for: type).displayMode
+    }
+
+    func setDisplayMode(_ mode: ReminderDisplayMode, for type: ReminderType) {
+        var reminder = settings.reminderSettings(for: type)
+        reminder.displayMode = mode
+        settings.reminders[type.rawValue] = reminder
+    }
+
     // MARK: - Notification Status
 
     func refreshNotificationStatus() async {

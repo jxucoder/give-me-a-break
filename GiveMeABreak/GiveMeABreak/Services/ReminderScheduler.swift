@@ -25,6 +25,7 @@ final class ReminderScheduler: ObservableObject {
     }
 
     private var notificationService: NotificationService { NotificationService.shared }
+    private var overlayManager: OverlayManager { OverlayManager.shared }
     private var llmService: LLMService { LLMService.shared }
     private var settingsCancellable: AnyCancellable?
 
@@ -206,13 +207,23 @@ final class ReminderScheduler: ObservableObject {
                 body += "\n\n\(entry.fact)"
             }
 
-            // Record delivery time right before sending so the coalescing window
-            // reflects when the notification actually fires, not when it was scheduled.
             self.lastNotificationDate = Date()
 
-            notificationService.sendReminder(
+            let displayMode = settings.reminderSettings(for: type).displayMode
+            deliverReminder(type: type, message: body, mode: displayMode, settings: settings)
+        }
+    }
+
+    private func deliverReminder(type: ReminderType, message: String, mode: ReminderDisplayMode, settings: AppSettings) {
+        switch mode {
+        case .notification:
+            notificationService.sendReminder(type: type, message: message, playSound: settings.playSounds)
+        case .banner, .fullscreen:
+            overlayManager.showOverlay(
                 type: type,
-                message: body,
+                message: message,
+                mode: mode,
+                dismissSeconds: settings.overlayDismissSeconds,
                 playSound: settings.playSounds
             )
         }
@@ -234,11 +245,8 @@ final class ReminderScheduler: ObservableObject {
                 body += "\n\n\(entry.fact)"
             }
 
-            notificationService.sendReminder(
-                type: type,
-                message: body,
-                playSound: settings.playSounds
-            )
+            let displayMode = settings.reminderSettings(for: type).displayMode
+            deliverReminder(type: type, message: body, mode: displayMode, settings: settings)
         }
     }
 }

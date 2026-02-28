@@ -21,6 +21,8 @@
 		E39BD7849264184BB751F68D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */; };
 		E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F7DE5BBC4C421178792C8C /* SettingsView.swift */; };
 		F95A5F2FA9C52284B7029E01 /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DCFEE435AB25EAC460D91 /* LLMService.swift */; };
+		BB0000000000000000000001 /* OverlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000002 /* OverlayManager.swift */; };
+		BB0000000000000000000003 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000004 /* OverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViewModel.swift; sourceTree = "<group>"; };
 		CE195B6612CD61C11084A96C /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		D22DCFEE435AB25EAC460D91 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
+		BB0000000000000000000002 /* OverlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayManager.swift; sourceTree = "<group>"; };
+		BB0000000000000000000004 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		D9D351E0B99801E2F2152713 /* GiveMeABreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GiveMeABreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -83,6 +87,7 @@
 			children = (
 				D22DCFEE435AB25EAC460D91 /* LLMService.swift */,
 				6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */,
+				BB0000000000000000000002 /* OverlayManager.swift */,
 				881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */,
 			);
 			path = Services;
@@ -125,6 +130,7 @@
 				09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */,
 				426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */,
 				786FA0459804211851AEA8B0 /* MenuBarView.swift */,
+				BB0000000000000000000004 /* OverlayView.swift */,
 				A8F7DE5BBC4C421178792C8C /* SettingsView.swift */,
 			);
 			path = Views;
@@ -223,6 +229,8 @@
 				11944FF4C31E3355665A54AF /* MenuBarView.swift in Sources */,
 				38F98BB3364404DBCB314B5D /* MenuBarViewModel.swift in Sources */,
 				2D9F468A963B7E82C63EC9F4 /* NotificationService.swift in Sources */,
+				BB0000000000000000000001 /* OverlayManager.swift in Sources */,
+				BB0000000000000000000003 /* OverlayView.swift in Sources */,
 				583A673AFFFA77E6B17AFA72 /* ReminderScheduler.swift in Sources */,
 				E080C6B6EACA1555765443DE /* ReminderType.swift in Sources */,
 				E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */,

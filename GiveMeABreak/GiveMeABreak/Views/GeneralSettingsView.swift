@@ -25,6 +25,29 @@ struct GeneralSettingsView: View {
                 }
             }
 
+            Section("Overlay Reminders") {
+                HStack {
+                    Text("Auto-dismiss after")
+                    Spacer()
+                    Text("\(settingsVM.settings.overlayDismissSeconds)s")
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+
+                Slider(
+                    value: Binding(
+                        get: { Double(settingsVM.settings.overlayDismissSeconds) },
+                        set: { settingsVM.settings.overlayDismissSeconds = Int($0) }
+                    ),
+                    in: 10...60,
+                    step: 5
+                )
+
+                Text("Applies to Banner and Fullscreen overlay modes. Set display mode per reminder from the menu bar.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Section("Updates") {
                 Toggle("Automatically check for updates", isOn: Binding(
                     get: { updater.automaticallyChecksForUpdates },
