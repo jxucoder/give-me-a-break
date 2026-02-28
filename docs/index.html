@@ -12,13 +12,14 @@
     <link rel="icon" href="logo.png" type="image/png">
     <style>
         :root {
-            --bg: #0a0a0a;
-            --surface: #141414;
-            --border: #222;
-            --text: #e8e8e8;
-            --text-secondary: #888;
-            --accent: #2dd4bf;
-            --accent-hover: #5eead4;
+            --bg: #f5f0eb;
+            --surface: #ffffff;
+            --border: #e0d8cf;
+            --text: #3d3529;
+            --text-secondary: #8a7e6f;
+            --accent: #7bae9e;
+            --accent-hover: #5e9a87;
+            --accent-text: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,7 +28,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.7;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -44,9 +45,10 @@
         }
 
         .hero-logo {
-            width: 80px;
-            height: 80px;
+            width: 88px;
+            height: 88px;
             margin-bottom: 24px;
+            filter: drop-shadow(0 4px 12px rgba(61, 53, 41, 0.1));
         }
 
         .hero h1 {
@@ -54,6 +56,7 @@
             font-weight: 700;
             letter-spacing: -0.02em;
             margin-bottom: 16px;
+            color: var(--text);
         }
 
         .hero p {
@@ -68,18 +71,20 @@
             align-items: center;
             gap: 10px;
             background: var(--accent);
-            color: #0a0a0a;
+            color: var(--accent-text);
             padding: 14px 32px;
             border-radius: 12px;
             font-size: 1.05rem;
             font-weight: 600;
             text-decoration: none;
             transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 4px 16px rgba(123, 174, 158, 0.3);
         }
 
         .download-btn:hover {
             background: var(--accent-hover);
             transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(94, 154, 135, 0.35);
         }
 
         .download-btn svg {
@@ -93,6 +98,13 @@
             color: var(--text-secondary);
         }
 
+        .download-meta code {
+            background: rgba(61, 53, 41, 0.07);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.82rem;
+        }
+
         /* Screenshot */
         .screenshot-section {
             text-align: center;
@@ -103,7 +115,7 @@
             max-width: 100%;
             border-radius: 12px;
             border: 1px solid var(--border);
-            box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+            box-shadow: 0 16px 48px rgba(61, 53, 41, 0.12);
         }
 
         /* Features */
@@ -131,6 +143,12 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 28px;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 8px 24px rgba(61, 53, 41, 0.08);
+            transform: translateY(-2px);
         }
 
         .feature-icon {
@@ -180,7 +198,7 @@
         }
 
         footer a {
-            color: var(--text-secondary);
+            color: var(--accent-hover);
             text-decoration: none;
         }
 
@@ -212,7 +230,7 @@
                 Download the <strong>GiveMeABreak-x.x.x.zip</strong> file, unzip it, and drag the app to your Applications folder.
             </div>
             <div class="download-meta" style="margin-top: 12px;">
-                Or install with Homebrew: <code style="background: #222; padding: 3px 8px; border-radius: 4px;">brew tap jxucoder/tap && brew install --cask give-me-a-break</code>
+                Or install with Homebrew: <code>brew tap jxucoder/tap && brew install --cask give-me-a-break</code>
             </div>
         </section>
 
