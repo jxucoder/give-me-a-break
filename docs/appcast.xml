@@ -4,12 +4,12 @@
     <title>Give Me A Break</title>
     <link>https://jxucoder.github.io/give-me-a-break/appcast.xml</link>
     <item>
-      <title>Version 1.4.0</title>
-      <pubDate>Sun, 01 Mar 2026 00:04:46 +0000</pubDate>
-      <sparkle:version>1.4.0</sparkle:version>
-      <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
+      <title>Version 1.5.0</title>
+      <pubDate>Sun, 01 Mar 2026 00:44:28 +0000</pubDate>
+      <sparkle:version>1.5.0</sparkle:version>
+      <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <enclosure url="https://github.com/jxucoder/give-me-a-break/releases/download/v1.4.0/GiveMeABreak-1.4.0.zip" length="16844784" type="application/octet-stream" sparkle:edSignature="kSayW5mrgcPlSa7K+fynIpiEBHheh0p7OkxUV3gyBvBfyEnegpoDQ2e8txwZQtx2hWmgnppmZ1aA7Qh7ao11AQ==" />
+      <enclosure url="https://github.com/jxucoder/give-me-a-break/releases/download/v1.5.0/GiveMeABreak-1.5.0.zip" length="16840793" type="application/octet-stream" sparkle:edSignature="pCaGVV/X3CzfE/JmHBIXpa9U7qFCuqflXZ054C/HyW1xM4Sv2TY2lfGVxplyPYGqf8EukIOfVzHdIakQW/jiBA==" />
     </item>
   </channel>
 </rss>
