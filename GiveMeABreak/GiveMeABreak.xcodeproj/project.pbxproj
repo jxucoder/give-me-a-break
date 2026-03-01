@@ -304,7 +304,7 @@
 				CODE_SIGN_ENTITLEMENTS = GiveMeABreak.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = GiveMeABreak/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -312,7 +312,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
 				PRODUCT_NAME = "Give Me A Break";
 				SDKROOT = macosx;
@@ -390,7 +390,7 @@
 				CODE_SIGN_ENTITLEMENTS = GiveMeABreak.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = GiveMeABreak/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -398,7 +398,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
 				PRODUCT_NAME = "Give Me A Break";
 				SDKROOT = macosx;
@@ -470,7 +470,7 @@
 				CODE_SIGN_ENTITLEMENTS = GiveMeABreak.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GiveMeABreak/Info-AppStore.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -478,7 +478,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
 				PRODUCT_NAME = "Give Me A Break";
 				SDKROOT = macosx;
