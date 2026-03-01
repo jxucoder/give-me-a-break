@@ -111,11 +111,24 @@
             padding: 32px 0 64px;
         }
 
-        .screenshot-section img {
-            max-width: 100%;
+        .screenshot-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .screenshot-gallery img {
+            max-width: 46%;
             border-radius: 12px;
             border: 1px solid var(--border);
             box-shadow: 0 16px 48px rgba(61, 53, 41, 0.12);
+        }
+
+        @media (max-width: 600px) {
+            .screenshot-gallery img {
+                max-width: 100%;
+            }
         }
 
         /* Features */
@@ -235,7 +248,10 @@
         </section>
 
         <section class="screenshot-section">
-            <img src="screenshot.png" alt="Give Me A Break screenshot showing menu bar timers and a posture check notification">
+            <div class="screenshot-gallery">
+                <img src="screenshot-menubar.png" alt="Menu bar controls with timer, interval slider, and display mode picker">
+                <img src="screenshot-fullscreen.png" alt="Fullscreen break reminder overlay">
+            </div>
         </section>
 
         <section class="features">

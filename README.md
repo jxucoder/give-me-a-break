@@ -15,7 +15,9 @@
 </p>
 
 <p align="center">
-  <img src="assets/screenshot.png" alt="Give Me A Break in action" width="700">
+  <img src="assets/screenshot-menubar.png" alt="Menu bar controls" width="340">
+  &nbsp;&nbsp;
+  <img src="assets/screenshot-fullscreen.png" alt="Fullscreen reminder" width="340">
 </p>
 
 ## Why?

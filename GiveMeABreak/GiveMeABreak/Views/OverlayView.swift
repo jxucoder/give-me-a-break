@@ -86,7 +86,7 @@ struct OverlayView: View {
 
     private var fullscreenView: some View {
         ZStack {
-            Color.black.opacity(manager.isVisible ? 0.45 : 0)
+            Color.black.opacity(manager.isVisible ? 0.75 : 0)
                 .ignoresSafeArea()
                 .onTapGesture { manager.dismiss() }
 
