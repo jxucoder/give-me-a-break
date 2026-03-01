@@ -36,7 +36,6 @@ struct AppSettings: Codable, Equatable {
     var llmEnabled: Bool
     var llmTone: LLMTone
     var customPrompt: String
-    var showHealthFacts: Bool
     var overlayDismissSeconds: Int
 
     static let `default` = AppSettings(
@@ -53,7 +52,6 @@ struct AppSettings: Codable, Equatable {
         llmEnabled: false,
         llmTone: .friendly,
         customPrompt: "Write a short notification reminding someone about their break. Be original and vary your phrasing.",
-        showHealthFacts: false,
         overlayDismissSeconds: 30
     )
 

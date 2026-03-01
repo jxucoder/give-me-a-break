@@ -202,15 +202,10 @@ final class ReminderScheduler: ObservableObject {
                 message = type.fallbackMessages.randomElement()!
             }
 
-            var body = message
-            if settings.showHealthFacts, let entry = type.healthFacts.randomElement() {
-                body += "\n\n\(entry.fact)"
-            }
-
             self.lastNotificationDate = Date()
 
             let displayMode = settings.reminderSettings(for: type).displayMode
-            deliverReminder(type: type, message: body, mode: displayMode, settings: settings)
+            deliverReminder(type: type, message: message, mode: displayMode, settings: settings)
         }
     }
 
@@ -240,13 +235,8 @@ final class ReminderScheduler: ObservableObject {
                 message = type.fallbackMessages.randomElement()!
             }
 
-            var body = message
-            if settings.showHealthFacts, let entry = type.healthFacts.randomElement() {
-                body += "\n\n\(entry.fact)"
-            }
-
             let displayMode = settings.reminderSettings(for: type).displayMode
-            deliverReminder(type: type, message: body, mode: displayMode, settings: settings)
+            deliverReminder(type: type, message: message, mode: displayMode, settings: settings)
         }
     }
 }

@@ -20,7 +20,7 @@
 
 ## Why?
 
-Sitting at a desk all day is terrible for your body. Studies from the CDC show that prolonged sitting increases risk of cardiovascular disease, chronic pain, and fatigue — even if you exercise regularly. The fix is simple: take short breaks, check your posture, and switch positions throughout the day.
+Sitting at a desk all day is terrible for your body. Prolonged sitting increases risk of cardiovascular disease, chronic pain, and fatigue — even if you exercise regularly. The fix is simple: take short breaks, check your posture, and switch positions throughout the day.
 
 **Give Me A Break** lives in your menu bar and quietly reminds you to do all three.
 
@@ -70,7 +70,6 @@ Or open `GiveMeABreak/GiveMeABreak.xcodeproj` in Xcode and hit Run.
 | Menu bar controls | Pause, resume, reset, and adjust intervals without leaving your workflow |
 | Smart notifications | macOS notifications with snooze options (5, 10, or 15 min) |
 | AI-generated messages | Optional on-device Apple Intelligence for varied, natural reminder text (macOS 26+) |
-| Health facts | Optional CDC-sourced health facts included in notifications |
 | Auto-updates | Built-in Sparkle updater notifies you when a new version is available |
 | Launch at login | Start automatically with your Mac |
 | Privacy-first | Everything runs locally. No accounts, no tracking, no data collection |

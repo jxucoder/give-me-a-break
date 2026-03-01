@@ -1,10 +1,14 @@
 import SwiftUI
+#if !APP_STORE
 import Sparkle
+#endif
 
 struct GeneralSettingsView: View {
     @ObservedObject var settingsVM = SettingsViewModel.shared
+    #if !APP_STORE
     let updater: SPUUpdater
     @State private var canCheckForUpdates = false
+    #endif
 
     var body: some View {
         Form {
@@ -42,6 +46,7 @@ struct GeneralSettingsView: View {
                     .foregroundStyle(.secondary)
             }
 
+            #if !APP_STORE
             Section("Updates") {
                 Toggle("Automatically check for updates", isOn: Binding(
                     get: { updater.automaticallyChecksForUpdates },
@@ -54,6 +59,7 @@ struct GeneralSettingsView: View {
                 }
                 .disabled(!canCheckForUpdates)
             }
+            #endif
 
             Section("Notification Permission") {
                 HStack {
@@ -73,8 +79,10 @@ struct GeneralSettingsView: View {
         .task {
             await settingsVM.refreshNotificationStatus()
         }
+        #if !APP_STORE
         .onReceive(updater.publisher(for: \.canCheckForUpdates)) { value in
             canCheckForUpdates = value
         }
+        #endif
     }
 }
