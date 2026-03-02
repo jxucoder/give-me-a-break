@@ -7,22 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F85E932002F92F1083CA8FD /* MenuBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */; };
 		11944FF4C31E3355665A54AF /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786FA0459804211851AEA8B0 /* MenuBarView.swift */; };
 		172D8CA366F2338D20008B5C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE195B6612CD61C11084A96C /* AppSettings.swift */; };
+		206495AA4C24424B6AD0D53B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F7DE5BBC4C421178792C8C /* SettingsView.swift */; };
 		2D9F468A963B7E82C63EC9F4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */; };
+		34A5C749D742CB0F49BCBFCB /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE195B6612CD61C11084A96C /* AppSettings.swift */; };
 		38F98BB3364404DBCB314B5D /* MenuBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */; };
+		524AA82A5F71575CF1B69086 /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0458441EFF9AFB3A1562689 /* ReminderType.swift */; };
 		583A673AFFFA77E6B17AFA72 /* ReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */; };
 		6A3ACAE64207B38867077B09 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469F1E22696BD50A5703BF22 /* Assets.xcassets */; };
 		761A8FD2456E737C6C53FC54 /* GiveMeABreakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6A97D2912CCF77CFFF32E /* GiveMeABreakApp.swift */; };
+		7B5216D4E711B4285A3D4410 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000004 /* OverlayView.swift */; };
 		7E7E04A61B825904F40C8084 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BE9E485BC85B5112B618BB /* SettingsViewModel.swift */; };
+		8A08FD762ADFDFEE9AC4B419 /* LLMSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */; };
 		8BA5E7EDD141FD3216483E6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792063B22C2A936B2B041F95 /* AppDelegate.swift */; };
-		C139A260D1DFCABEE43782CC /* LLMSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */; };
-		E080C6B6EACA1555765443DE /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0458441EFF9AFB3A1562689 /* ReminderType.swift */; };
-		E39BD7849264184BB751F68D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */; };
-		E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F7DE5BBC4C421178792C8C /* SettingsView.swift */; };
-		F95A5F2FA9C52284B7029E01 /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DCFEE435AB25EAC460D91 /* LLMService.swift */; };
+		9D73EC0F9437565B3ED5AFF3 /* GiveMeABreakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6A97D2912CCF77CFFF32E /* GiveMeABreakApp.swift */; };
+		B87A6B6251D5789F3063D83B /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786FA0459804211851AEA8B0 /* MenuBarView.swift */; };
 		BB0000000000000000000001 /* OverlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000002 /* OverlayManager.swift */; };
 		BB0000000000000000000003 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000004 /* OverlayView.swift */; };
+		C139A260D1DFCABEE43782CC /* LLMSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426FA9AEF0E80FDDC424B337 /* LLMSettingsView.swift */; };
+		C6DB27190737F717C051EC82 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */; };
+		D3398250EB2814633CD80BB4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */; };
+		D445F4695E7D66D9671341BA /* Assets.xcassets in Sources */ = {isa = PBXBuildFile; fileRef = 469F1E22696BD50A5703BF22 /* Assets.xcassets */; };
+		D59035B2BC0738FE4517605C /* OverlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000002 /* OverlayManager.swift */; };
+		E080C6B6EACA1555765443DE /* ReminderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0458441EFF9AFB3A1562689 /* ReminderType.swift */; };
+		E17FE50066960C3BC3971B93 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BE9E485BC85B5112B618BB /* SettingsViewModel.swift */; };
+		E39BD7849264184BB751F68D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FDAF54ED5FABD433A2E465 /* GeneralSettingsView.swift */; };
+		E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F7DE5BBC4C421178792C8C /* SettingsView.swift */; };
+		EF9BA96FD267DC890CDBAC26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792063B22C2A936B2B041F95 /* AppDelegate.swift */; };
+		EFC3567077136ECBC5CCD96D /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DCFEE435AB25EAC460D91 /* LLMService.swift */; };
+		F5E6F87BC1D2BA0B2177781B /* ReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */; };
+		F95A5F2FA9C52284B7029E01 /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DCFEE435AB25EAC460D91 /* LLMService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,18 +51,27 @@
 		6E6885CAD68F0E23824EF8D6 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		786FA0459804211851AEA8B0 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		792063B22C2A936B2B041F95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		81FDAE9A467AA673AE597235 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		881AA74EFB4F95D3066AB9A4 /* ReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderScheduler.swift; sourceTree = "<group>"; };
+		A325B1CC86B84F643313E2B4 /* GiveMeABreakAppStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GiveMeABreakAppStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8F7DE5BBC4C421178792C8C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B0458441EFF9AFB3A1562689 /* ReminderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderType.swift; sourceTree = "<group>"; };
+		BB0000000000000000000002 /* OverlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayManager.swift; sourceTree = "<group>"; };
+		BB0000000000000000000004 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		BFDDF4CB0874E73D5A988652 /* MenuBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViewModel.swift; sourceTree = "<group>"; };
 		CE195B6612CD61C11084A96C /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		D22DCFEE435AB25EAC460D91 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
-		BB0000000000000000000002 /* OverlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayManager.swift; sourceTree = "<group>"; };
-		BB0000000000000000000004 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		D9D351E0B99801E2F2152713 /* GiveMeABreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GiveMeABreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		07976DA2324EA82ED4A0B92B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA1234560000000000000003 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				D9D351E0B99801E2F2152713 /* GiveMeABreak.app */,
+				A325B1CC86B84F643313E2B4 /* GiveMeABreakAppStore.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,6 +133,14 @@
 			path = GiveMeABreak;
 			sourceTree = "<group>";
 		};
+		842C088E0D255A78434F5B90 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BA2126D09592D7E44C224376 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B8E9C89C8396954FF2D90E16 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,11 +150,20 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		BA2126D09592D7E44C224376 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				81FDAE9A467AA673AE597235 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
 		F3C5EA92C3D920C400D5A490 = {
 			isa = PBXGroup;
 			children = (
 				80188903E01BB69F0C0B4CD0 /* GiveMeABreak */,
 				0D5FB1D1DFF066700106D969 /* Products */,
+				842C088E0D255A78434F5B90 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,6 +211,23 @@
 			productReference = D9D351E0B99801E2F2152713 /* GiveMeABreak.app */;
 			productType = "com.apple.product-type.application";
 		};
+		491918A94530339F64A95492 /* GiveMeABreakAppStore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9EFA16523439D568527A084 /* Build configuration list for PBXNativeTarget "GiveMeABreakAppStore" */;
+			buildPhases = (
+				49F48525FA36897E957E52A2 /* Sources */,
+				07976DA2324EA82ED4A0B92B /* Frameworks */,
+				6C53BE09643C74A634410BA3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GiveMeABreakAppStore;
+			productName = GiveMeABreakAppStore;
+			productReference = A325B1CC86B84F643313E2B4 /* GiveMeABreakAppStore.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -192,14 +252,16 @@
 			);
 			mainGroup = F3C5EA92C3D920C400D5A490;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			projectDirPath = "";
-			projectRoot = "";
 			packageReferences = (
 				AA1234560000000000000002 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0D5FB1D1DFF066700106D969 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				471A230EFF5C6D2E1B239172 /* GiveMeABreak */,
+				491918A94530339F64A95492 /* GiveMeABreakAppStore */,
 			);
 		};
 /* End PBXProject section */
@@ -210,6 +272,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A3ACAE64207B38867077B09 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C53BE09643C74A634410BA3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +304,29 @@
 				E080C6B6EACA1555765443DE /* ReminderType.swift in Sources */,
 				E6241A97C9D62FF4C27F3A60 /* SettingsView.swift in Sources */,
 				7E7E04A61B825904F40C8084 /* SettingsViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49F48525FA36897E957E52A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF9BA96FD267DC890CDBAC26 /* AppDelegate.swift in Sources */,
+				34A5C749D742CB0F49BCBFCB /* AppSettings.swift in Sources */,
+				C6DB27190737F717C051EC82 /* GeneralSettingsView.swift in Sources */,
+				9D73EC0F9437565B3ED5AFF3 /* GiveMeABreakApp.swift in Sources */,
+				EFC3567077136ECBC5CCD96D /* LLMService.swift in Sources */,
+				8A08FD762ADFDFEE9AC4B419 /* LLMSettingsView.swift in Sources */,
+				B87A6B6251D5789F3063D83B /* MenuBarView.swift in Sources */,
+				0F85E932002F92F1083CA8FD /* MenuBarViewModel.swift in Sources */,
+				D3398250EB2814633CD80BB4 /* NotificationService.swift in Sources */,
+				D59035B2BC0738FE4517605C /* OverlayManager.swift in Sources */,
+				7B5216D4E711B4285A3D4410 /* OverlayView.swift in Sources */,
+				F5E6F87BC1D2BA0B2177781B /* ReminderScheduler.swift in Sources */,
+				524AA82A5F71575CF1B69086 /* ReminderType.swift in Sources */,
+				206495AA4C24424B6AD0D53B /* SettingsView.swift in Sources */,
+				E17FE50066960C3BC3971B93 /* SettingsViewModel.swift in Sources */,
+				D445F4695E7D66D9671341BA /* Assets.xcassets in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +388,30 @@
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
+		};
+		1C5C0D275261716646667D7B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = GiveMeABreak.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "GiveMeABreak/Info-AppStore.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
+				PRODUCT_NAME = "Give Me A Break";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APP_STORE;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
 		};
 		1D1EDCE61DB0E2EBE37C03FE /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -383,7 +499,7 @@
 			};
 			name = Debug;
 		};
-		B4CE0273E169852CBADFAB91 /* Release */ = {
+		788163661A71080033CCAE44 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -392,7 +508,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = GiveMeABreak/Info.plist;
+				INFOPLIST_FILE = "GiveMeABreak/Info-AppStore.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -402,9 +518,34 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
 				PRODUCT_NAME = "Give Me A Break";
 				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APP_STORE;
 				SWIFT_VERSION = 5.9;
 			};
 			name = Release;
+		};
+		93C9DBDC2471252060C06FA2 /* Release-AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = GiveMeABreak.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "GiveMeABreak/Info-AppStore.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
+				PRODUCT_NAME = "Give Me A Break";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APP_STORE;
+				SWIFT_VERSION = 5.9;
+			};
+			name = "Release-AppStore";
 		};
 		AA0000000000000000000010 /* Release-AppStore */ = {
 			isa = XCBuildConfiguration;
@@ -486,6 +627,29 @@
 			};
 			name = "Release-AppStore";
 		};
+		B4CE0273E169852CBADFAB91 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = GiveMeABreak.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = GiveMeABreak/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.5.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.givemeabreak.app;
+				PRODUCT_NAME = "Give Me A Break";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -505,6 +669,16 @@
 				6F2AF66E0D8C4E51CF3EC74C /* Debug */,
 				0E35C9C355F737B80022DDCD /* Release */,
 				AA0000000000000000000010 /* Release-AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B9EFA16523439D568527A084 /* Build configuration list for PBXNativeTarget "GiveMeABreakAppStore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788163661A71080033CCAE44 /* Release */,
+				1C5C0D275261716646667D7B /* Debug */,
+				93C9DBDC2471252060C06FA2 /* Release-AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

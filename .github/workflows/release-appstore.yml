@@ -8,8 +8,9 @@ on:
         required: true
 
 env:
-  SCHEME: GiveMeABreak
+  SCHEME: GiveMeABreakAppStore
   PROJECT_DIR: GiveMeABreak
+  PROJECT_FILE: GiveMeABreak.xcodeproj
   APP_NAME: "Give Me A Break"
   APP_BUNDLE_ID: com.givemeabreak.app
 
@@ -104,7 +105,7 @@ jobs:
       - name: Build archive
         run: |
           xcodebuild archive \
-            -project "$PROJECT_DIR/$SCHEME.xcodeproj" \
+            -project "$PROJECT_DIR/$PROJECT_FILE" \
             -scheme "$SCHEME" \
             -configuration Release-AppStore \
             -archivePath "$RUNNER_TEMP/$SCHEME.xcarchive" \
