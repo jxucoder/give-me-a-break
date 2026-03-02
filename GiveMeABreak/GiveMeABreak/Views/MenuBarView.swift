@@ -79,13 +79,12 @@ struct MenuBarView: View {
             HStack(spacing: 10) {
                 ZStack {
                     Circle()
-                        .stroke(type.tintColor.opacity(0.15), lineWidth: 3)
+                        .stroke(Color.primary.opacity(0.12), lineWidth: 3)
 
                     Circle()
                         .trim(from: 0, to: viewModel.timerProgress[type] ?? 0)
                         .stroke(type.tintColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
                         .rotationEffect(.degrees(-90))
-                        .animation(.linear(duration: 1), value: viewModel.timerProgress[type])
 
                     Image(systemName: type.icon)
                         .font(.system(size: 11))

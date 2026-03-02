@@ -34,7 +34,7 @@ final class OverlayManager: ObservableObject {
         secondsRemaining = dismissSeconds
         isShowing = true
 
-        if playSound {
+        if playSound && mode == .banner {
             NSSound.beep()
         }
 

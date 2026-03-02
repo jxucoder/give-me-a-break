@@ -64,11 +64,8 @@ final class ReminderScheduler: ObservableObject {
             typesToStart.append((type, reminderSettings.intervalMinutes))
         }
 
-        // Stagger new timers so they don't all fire at the same moment.
-        let staggerStep: TimeInterval = 90  // 1.5 min between each timer
-        for (index, (type, intervalMinutes)) in typesToStart.enumerated() {
-            let offset = TimeInterval(index) * staggerStep
-            startTimer(for: type, intervalMinutes: intervalMinutes, initialOffset: offset, settings: settings)
+        for (type, intervalMinutes) in typesToStart {
+            startTimer(for: type, intervalMinutes: intervalMinutes, initialOffset: 0, settings: settings)
         }
     }
 

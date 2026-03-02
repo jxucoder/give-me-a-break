@@ -66,8 +66,9 @@ final class MenuBarViewModel: ObservableObject {
         var changed = false
         for type in ReminderType.allCases {
             if let remaining = scheduler.timeRemaining(for: type) {
-                let newText = formatTimeInterval(remaining)
                 let total = TimeInterval((scheduler.timerStates[type]?.intervalMinutes ?? type.defaultIntervalMinutes) * 60)
+                let cappedRemaining = min(remaining, total)
+                let newText = formatTimeInterval(cappedRemaining)
                 let newProgress = total > 0 ? max(0, min(1, 1.0 - remaining / total)) : 0
 
                 if displayTimers[type] != newText {
