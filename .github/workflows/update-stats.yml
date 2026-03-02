@@ -1,0 +1,80 @@
+name: Update Website Stats
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-stats:
+    name: Refresh docs/stats.json
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build stats snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          RELEASES_FILE="$RUNNER_TEMP/releases.json"
+          REPO_FILE="$RUNNER_TEMP/repo.json"
+          NEW_STATS_FILE="$RUNNER_TEMP/new-stats.json"
+
+          gh api "repos/$REPO/releases?per_page=100" --paginate > "$RELEASES_FILE"
+          gh api "repos/$REPO" > "$REPO_FILE"
+
+          UPDATED_AT="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          STARS="$(jq '.stargazers_count // 0' "$REPO_FILE")"
+          FORKS="$(jq '.forks_count // 0' "$REPO_FILE")"
+          WATCHERS="$(jq '.subscribers_count // 0' "$REPO_FILE")"
+          OPEN_ISSUES="$(jq '.open_issues_count // 0' "$REPO_FILE")"
+          RELEASE_COUNT="$(jq -s 'add | length' "$RELEASES_FILE")"
+          TOTAL_DOWNLOADS="$(jq -s 'add | [.[].assets[]?.download_count] | add // 0' "$RELEASES_FILE")"
+          LATEST_RELEASE_TAG="$(jq -r -s 'add | sort_by(.published_at) | last | .tag_name // ""' "$RELEASES_FILE")"
+
+          jq -n \
+            --arg updatedAt "$UPDATED_AT" \
+            --arg repo "$REPO" \
+            --arg latestReleaseTag "$LATEST_RELEASE_TAG" \
+            --argjson stars "$STARS" \
+            --argjson forks "$FORKS" \
+            --argjson watchers "$WATCHERS" \
+            --argjson openIssues "$OPEN_ISSUES" \
+            --argjson releaseCount "$RELEASE_COUNT" \
+            --argjson totalDownloads "$TOTAL_DOWNLOADS" \
+            '{
+              updated_at: $updatedAt,
+              repo: $repo,
+              stars: $stars,
+              forks: $forks,
+              watchers: $watchers,
+              open_issues: $openIssues,
+              release_count: $releaseCount,
+              total_downloads: $totalDownloads,
+              latest_release_tag: $latestReleaseTag
+            }' > "$NEW_STATS_FILE"
+
+          if [ -f docs/stats.json ] && [ "$(jq -S 'del(.updated_at)' docs/stats.json)" = "$(jq -S 'del(.updated_at)' "$NEW_STATS_FILE")" ]; then
+            cp docs/stats.json "$NEW_STATS_FILE"
+          fi
+
+          cp "$NEW_STATS_FILE" docs/stats.json
+
+      - name: Commit stats file
+        run: |
+          if git diff --quiet -- docs/stats.json; then
+            echo "No stats changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/stats.json
+          git commit -m "Update website stats"
+          git push origin "HEAD:${{ github.ref_name }}"

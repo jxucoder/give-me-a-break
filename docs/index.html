@@ -10,6 +10,31 @@
     <meta property="og:image" content="screenshot.png">
     <meta property="og:type" content="website">
     <link rel="icon" href="logo.png" type="image/png">
+    <script>
+        // Set your GA4 Measurement ID before publishing (example: G-ABC123XYZ1).
+        window.GA_MEASUREMENT_ID = "G-DB7M4NJZK8";
+    </script>
+    <script>
+        (function () {
+            var measurementId = window.GA_MEASUREMENT_ID;
+            if (!measurementId || measurementId === "G-REPLACE_ME") {
+                return;
+            }
+
+            var analyticsScript = document.createElement("script");
+            analyticsScript.async = true;
+            analyticsScript.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(measurementId);
+            document.head.appendChild(analyticsScript);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function gtag() {
+                window.dataLayer.push(arguments);
+            };
+
+            window.gtag("js", new Date());
+            window.gtag("config", measurementId, { anonymize_ip: true });
+        })();
+    </script>
     <style>
         :root {
             --bg: #f5f0eb;
@@ -103,6 +128,32 @@
             padding: 3px 8px;
             border-radius: 4px;
             font-size: 0.82rem;
+        }
+
+        .download-stats {
+            margin-top: 10px;
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+        }
+
+        .download-stats strong {
+            color: var(--text);
+        }
+
+        .copy-btn {
+            margin-left: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #f2ebe3;
         }
 
         /* Screenshot */
@@ -227,7 +278,13 @@
             <img src="logo.png" alt="Give Me A Break" class="hero-logo">
             <h1>Give Me A Break</h1>
             <p>A lightweight macOS menu bar app that reminds you to take breaks, fix your posture, and switch between standing and sitting.</p>
-            <a href="https://github.com/jxucoder/give-me-a-break/releases/latest" class="download-btn">
+            <a
+                id="download-macos-btn"
+                href="https://github.com/jxucoder/give-me-a-break/releases/latest"
+                class="download-btn"
+                data-download-channel="website_button"
+                data-download-target="github_latest_release"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                 Download for macOS
             </a>
@@ -236,7 +293,21 @@
                 Download the <strong>GiveMeABreak-x.x.x.zip</strong> file, unzip it, and drag the app to your Applications folder.
             </div>
             <div class="download-meta" style="margin-top: 12px;">
-                Or install with Homebrew: <code>brew tap jxucoder/tap && brew install --cask give-me-a-break</code>
+                Or install with Homebrew:
+                <code id="homebrew-command">brew tap jxucoder/tap && brew install --cask give-me-a-break</code>
+                <button
+                    type="button"
+                    class="copy-btn"
+                    id="copy-homebrew-btn"
+                    data-download-channel="homebrew_copy"
+                    data-download-target="homebrew_install_command"
+                    data-copy-target="homebrew-command"
+                >
+                    Copy
+                </button>
+            </div>
+            <div class="download-stats" id="download-stats" aria-live="polite">
+                GitHub downloads: loading...
             </div>
         </section>
 
@@ -278,14 +349,14 @@
                 <div class="feature-card">
                     <div class="feature-icon">&#128274;</div>
                     <h3>Privacy First</h3>
-                    <p>Zero network requests. No accounts. No tracking. Everything stays on your Mac.</p>
+                    <p>The app runs fully local. No accounts. No data collection from your Mac.</p>
                 </div>
             </div>
         </section>
 
         <section class="privacy">
             <h2>Your data stays on your Mac</h2>
-            <p>Give Me A Break makes zero network requests. All settings are stored locally. If you enable AI messages, they're generated entirely on-device using Apple Intelligence.</p>
+            <p>The Give Me A Break app itself makes zero tracking network requests, and all settings are stored locally. This website uses Google Analytics to understand visits and download clicks. If you enable AI messages, they're generated entirely on-device using Apple Intelligence.</p>
         </section>
 
         <footer>
@@ -297,5 +368,84 @@
         </footer>
 
     </div>
+    <script>
+        (function () {
+            function formatNumber(value) {
+                if (typeof value !== "number" || Number.isNaN(value)) {
+                    return "0";
+                }
+                return new Intl.NumberFormat("en-US").format(value);
+            }
+
+            function trackDownload(channel, target, url) {
+                if (typeof window.gtag !== "function") {
+                    return;
+                }
+
+                window.gtag("event", "download_click", {
+                    download_channel: channel,
+                    download_target: target,
+                    link_url: url || ""
+                });
+            }
+
+            var trackedElements = document.querySelectorAll("[data-download-channel][data-download-target]");
+            for (var i = 0; i < trackedElements.length; i++) {
+                (function (element) {
+                    element.addEventListener("click", function () {
+                        var channel = element.getAttribute("data-download-channel") || "unknown";
+                        var target = element.getAttribute("data-download-target") || "unknown";
+                        var url = element.tagName === "A" ? element.href : "";
+                        trackDownload(channel, target, url);
+                    });
+                })(trackedElements[i]);
+            }
+
+            var copyHomebrewButton = document.getElementById("copy-homebrew-btn");
+            if (copyHomebrewButton) {
+                copyHomebrewButton.addEventListener("click", function () {
+                    var targetId = copyHomebrewButton.getAttribute("data-copy-target");
+                    var targetElement = targetId ? document.getElementById(targetId) : null;
+                    var copyValue = targetElement ? targetElement.textContent : "";
+
+                    if (copyValue && navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(copyValue).catch(function () {
+                            return;
+                        });
+                    }
+
+                    copyHomebrewButton.textContent = "Copied";
+                    window.setTimeout(function () {
+                        copyHomebrewButton.textContent = "Copy";
+                    }, 1600);
+                });
+            }
+
+            function loadDownloadStats() {
+                var statsElement = document.getElementById("download-stats");
+                if (!statsElement) {
+                    return;
+                }
+
+                fetch("stats.json", { cache: "no-store" })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error("Could not load stats.");
+                        }
+                        return response.json();
+                    })
+                    .then(function (stats) {
+                        var totalDownloads = typeof stats.total_downloads === "number" ? stats.total_downloads : 0;
+                        var releaseCount = typeof stats.release_count === "number" ? stats.release_count : 0;
+                        statsElement.innerHTML = "GitHub downloads: <strong>" + formatNumber(totalDownloads) + "</strong> across " + formatNumber(releaseCount) + " releases";
+                    })
+                    .catch(function () {
+                        statsElement.textContent = "GitHub downloads unavailable right now.";
+                    });
+            }
+
+            loadDownloadStats();
+        })();
+    </script>
 </body>
 </html>
