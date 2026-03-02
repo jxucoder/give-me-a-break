@@ -89,12 +89,9 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          INSTALLER_CERT_IDENTITY="Mac Installer Distribution"
-          if ! security find-certificate -a -c "$INSTALLER_CERT_IDENTITY" >/dev/null 2>&1; then
-            if security find-certificate -a -c "3rd Party Mac Developer Installer" >/dev/null 2>&1; then
-              INSTALLER_CERT_IDENTITY="3rd Party Mac Developer Installer"
-            fi
-          fi
+          # App Store installer cert for this team is currently issued as
+          # "3rd Party Mac Developer Installer".
+          INSTALLER_CERT_IDENTITY="3rd Party Mac Developer Installer"
 
           EXPORT_OPTIONS_PLIST="$RUNNER_TEMP/ExportOptions-AppStore.plist"
           cp "$PROJECT_DIR/ExportOptions-AppStore.plist" "$EXPORT_OPTIONS_PLIST"
