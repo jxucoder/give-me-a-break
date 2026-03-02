@@ -11,7 +11,7 @@
     <key>signingCertificate</key>
     <string>Apple Distribution</string>
     <key>installerSigningCertificate</key>
-    <string>Mac Installer Distribution</string>
+    <string>__INSTALLER_SIGNING_CERTIFICATE__</string>
     <key>provisioningProfiles</key>
     <dict>
         <key>__BUNDLE_ID__</key>
