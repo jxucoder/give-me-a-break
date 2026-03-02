@@ -124,8 +124,11 @@ jobs:
           ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
           ASC_API_KEY: ${{ secrets.ASC_API_KEY }}
         run: |
-          KEY_PATH="$RUNNER_TEMP/AuthKey.p8"
+          KEY_DIR="$HOME/.appstoreconnect/private_keys"
+          KEY_PATH="$KEY_DIR/AuthKey_${ASC_API_KEY_ID}.p8"
+          mkdir -p "$KEY_DIR"
           echo "$ASC_API_KEY" > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
 
           ARTIFACT_PATH="$(ls "$RUNNER_TEMP"/appstore/*.pkg 2>/dev/null | head -n 1 || true)"
           if [ -z "$ARTIFACT_PATH" ]; then
