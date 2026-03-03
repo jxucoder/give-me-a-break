@@ -7,7 +7,16 @@
     <key>teamID</key>
     <string>__TEAM_ID__</string>
     <key>signingStyle</key>
-    <string>automatic</string>
+    <string>manual</string>
+    <key>signingCertificate</key>
+    <string>Apple Distribution</string>
+    <key>installerSigningCertificate</key>
+    <string>__INSTALLER_SIGNING_CERTIFICATE__</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>__BUNDLE_ID__</key>
+        <string>__PROFILE_UUID__</string>
+    </dict>
     <key>uploadSymbols</key>
     <true/>
 </dict>
