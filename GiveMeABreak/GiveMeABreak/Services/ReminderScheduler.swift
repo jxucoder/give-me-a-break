@@ -151,13 +151,14 @@ final class ReminderScheduler: ObservableObject {
         let fireDate = Date().addingTimeInterval(delay)
         let nextInterval = TimeInterval(intervalMinutes * 60)
 
-        let timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
+        let timer = Timer(timeInterval: delay, repeats: false) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self else { return }
                 self.scheduleNext(for: type, delay: nextInterval, intervalMinutes: intervalMinutes, settings: settings)
                 self.timerFired(for: type, settings: settings)
             }
         }
+        RunLoop.main.add(timer, forMode: .common)
 
         timerStates[type] = TimerState(
             isActive: true,
