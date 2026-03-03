@@ -32,7 +32,7 @@ Sitting at a desk all day is terrible for your body. Prolonged sitting increases
 - **Check Posture** — Nudges you to sit up straight, relax your shoulders, and unclench your jaw
 - **Stand / Sit** — Prompts you to alternate between standing and sitting at your desk
 
-Each reminder runs on its own independent timer with its own interval (5 min to 2 hours). Pause, reset, or adjust any of them directly from the menu bar — no need to open a settings window.
+Each reminder runs on its own independent timer with its own interval (5 min to 2 hours). Visual progress rings show how much time remains at a glance. Pause, reset, or adjust any of them directly from the menu bar — no need to open a settings window.
 
 ## Install
 
@@ -69,7 +69,9 @@ Or open `GiveMeABreak/GiveMeABreak.xcodeproj` in Xcode and hit Run.
 | Feature | Details |
 |---|---|
 | Three independent timers | Break, Posture, Stand/Sit — each with its own interval and controls |
+| Visual progress rings | See time remaining at a glance with color-coded progress indicators |
 | Menu bar controls | Pause, resume, reset, and adjust intervals without leaving your workflow |
+| Flexible display modes | Choose notification, banner, or fullscreen overlay for each reminder |
 | Smart notifications | macOS notifications with snooze options (5, 10, or 15 min) |
 | AI-generated messages | Optional on-device Apple Intelligence for varied, natural reminder text (macOS 26+) |
 | Auto-updates | Built-in Sparkle updater notifies you when a new version is available |
@@ -80,7 +82,8 @@ Or open `GiveMeABreak/GiveMeABreak.xcodeproj` in Xcode and hit Run.
 
 Open **Settings** from the menu bar dropdown to configure:
 
-- **General** — Launch at login, notification sounds, health facts, check for updates
+- **General** — Launch at login, notification sounds, overlay duration, check for updates
+- **Reminders** — Enable/disable each reminder, set intervals, choose display mode (notification, banner, or fullscreen)
 - **AI Messages** — Enable Apple Intelligence, pick a tone (friendly, humorous, professional, motivational), or write your own custom prompt
 
 ## Privacy
