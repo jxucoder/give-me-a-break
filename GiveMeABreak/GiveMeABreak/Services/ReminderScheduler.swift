@@ -178,10 +178,6 @@ final class ReminderScheduler: ObservableObject {
     private var lastNotificationDate: Date = .distantPast
 
     private func timerFired(for type: ReminderType, settings: AppSettings) {
-        // Update the fire date for the next cycle
-        let interval = TimeInterval((timerStates[type]?.intervalMinutes ?? type.defaultIntervalMinutes) * 60)
-        timerStates[type]?.fireDate = Date().addingTimeInterval(interval)
-
         // Coalesce: if another notification fired very recently, delay briefly
         let now = Date()
         let sinceLastNotification = now.timeIntervalSince(lastNotificationDate)
