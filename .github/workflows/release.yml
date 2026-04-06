@@ -149,7 +149,7 @@ jobs:
           <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
             <channel>
               <title>Give Me A Break</title>
-              <link>https://jxucoder.github.io/give-me-a-break/appcast.xml</link>
+              <link>https://givemeabreak.app/appcast.xml</link>
               <item>
                 <title>Version ${{ steps.version.outputs.VERSION }}</title>
                 <pubDate>${PUBDATE}</pubDate>

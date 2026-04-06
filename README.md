@@ -20,9 +20,9 @@
 </p>
 
 <p align="center">
-  <a href="https://jxucoder.github.io/give-me-a-break/">Website</a> &nbsp;&middot;&nbsp;
+  <a href="https://givemeabreak.app/">Website</a> &nbsp;&middot;&nbsp;
   <a href="https://github.com/jxucoder/give-me-a-break/releases">Changelog</a> &nbsp;&middot;&nbsp;
-  <a href="https://jxucoder.github.io/give-me-a-break/privacy.html">Privacy Policy</a>
+  <a href="https://givemeabreak.app/privacy.html">Privacy Policy</a>
 </p>
 
 <br>
@@ -99,7 +99,7 @@ Open **Settings** from the menu bar dropdown:
 
 ## Privacy
 
-Give Me A Break does not collect any data. All settings are stored locally. The only network request the direct download version makes is checking for updates via the [appcast feed](https://jxucoder.github.io/give-me-a-break/appcast.xml). AI-generated messages are processed entirely on-device using Apple's Foundation Models framework.
+Give Me A Break does not collect any data. All settings are stored locally. The only network request the direct download version makes is checking for updates via the [appcast feed](https://givemeabreak.app/appcast.xml). AI-generated messages are processed entirely on-device using Apple's Foundation Models framework.
 
 ## License
 
