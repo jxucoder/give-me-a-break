@@ -11,29 +11,80 @@
     <meta property="og:type" content="website">
     <link rel="icon" href="logo.png" type="image/png">
     <style>
-        :root {
-            --bg: #f5f0eb;
-            --surface: #ffffff;
-            --border: #e0d8cf;
-            --text: #3d3529;
-            --text-secondary: #8a7e6f;
-            --accent: #7bae9e;
-            --accent-hover: #5e9a87;
-            --accent-text: #ffffff;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background */
+        .ambient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+
+        .ambient-orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.3), transparent 70%);
+            top: -200px;
+            right: -100px;
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        .ambient-orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.25), transparent 70%);
+            bottom: 20%;
+            left: -150px;
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        .ambient-orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(52, 211, 153, 0.2), transparent 70%);
+            top: 50%;
+            right: -100px;
+            animation: float3 22s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-40px, 30px); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -40px); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -30px); }
         }
 
         .container {
-            max-width: 800px;
+            max-width: 960px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -41,213 +92,345 @@
         /* Hero */
         .hero {
             text-align: center;
-            padding: 80px 0 48px;
+            padding: 100px 0 64px;
         }
 
         .hero-logo {
-            width: 88px;
-            height: 88px;
-            margin-bottom: 24px;
-            filter: drop-shadow(0 4px 12px rgba(61, 53, 41, 0.1));
+            width: 96px;
+            height: 96px;
+            margin-bottom: 28px;
+            border-radius: 22px;
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.08),
+                0 1px 3px rgba(0, 0, 0, 0.06);
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3.2rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
             margin-bottom: 16px;
-            color: var(--text);
+            background: linear-gradient(135deg, #1d1d1f 0%, #424245 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 520px;
-            margin: 0 auto 36px;
+        .hero .subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #86868b;
+            max-width: 480px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+        }
+
+        /* Download buttons */
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .appstore-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #000;
+            color: #fff;
+            padding: 11px 22px;
+            border-radius: 13px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .appstore-btn:hover {
+            background: #1d1d1f;
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .appstore-btn svg {
+            width: 26px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .appstore-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+            text-align: left;
+        }
+
+        .appstore-label {
+            font-size: 0.58rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        .appstore-store {
+            font-size: 1.12rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
         .download-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: var(--accent);
-            color: var(--accent-text);
-            padding: 14px 32px;
-            border-radius: 12px;
-            font-size: 1.05rem;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #1d1d1f;
+            padding: 13px 26px;
+            border-radius: 13px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
-            transition: background 0.2s, transform 0.15s;
-            box-shadow: 0 4px 16px rgba(123, 174, 158, 0.3);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .download-btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(94, 154, 135, 0.35);
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         .download-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
         }
 
         .download-meta {
-            margin-top: 14px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            margin-top: 12px;
+            font-size: 0.82rem;
+            color: #86868b;
         }
 
         .download-meta code {
-            background: rgba(61, 53, 41, 0.07);
+            background: rgba(0, 0, 0, 0.05);
             padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.82rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace;
         }
 
-        /* Screenshot */
-        .screenshot-section {
-            text-align: center;
-            padding: 32px 0 64px;
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #424245;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .github-link:hover {
+            color: #1d1d1f;
+        }
+
+        .github-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Screenshots */
+        .screenshots {
+            padding: 32px 0 80px;
         }
 
         .screenshot-gallery {
             display: flex;
             justify-content: center;
-            gap: 24px;
+            align-items: center;
+            gap: 32px;
             flex-wrap: wrap;
         }
 
         .screenshot-gallery img {
-            max-width: 46%;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 16px 48px rgba(61, 53, 41, 0.12);
+            max-width: 44%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        @media (max-width: 600px) {
-            .screenshot-gallery img {
-                max-width: 100%;
-            }
-        }
-
-        /* Features */
+        /* Glass card section */
         .features {
-            padding: 64px 0;
-            border-top: 1px solid var(--border);
+            padding: 80px 0;
         }
 
         .features h2 {
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+        }
+
+        .features .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #86868b;
             margin-bottom: 48px;
-            letter-spacing: -0.01em;
         }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
         .feature-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 28px;
-            transition: box-shadow 0.2s, transform 0.2s;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 32px 28px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .feature-card:hover {
-            box-shadow: 0 8px 24px rgba(61, 53, 41, 0.08);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
         }
 
         .feature-icon {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
+            font-size: 2rem;
+            margin-bottom: 16px;
         }
 
         .feature-card h3 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             margin-bottom: 8px;
+            letter-spacing: -0.01em;
         }
 
         .feature-card p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            font-size: 0.88rem;
+            color: #86868b;
             line-height: 1.5;
         }
 
         /* Privacy */
         .privacy {
-            padding: 64px 0;
-            border-top: 1px solid var(--border);
+            padding: 80px 0;
             text-align: center;
+        }
+
+        .privacy-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 24px;
+            padding: 56px 48px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .privacy-icon {
+            font-size: 2.4rem;
+            margin-bottom: 20px;
         }
 
         .privacy h2 {
             font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
         }
 
         .privacy p {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            max-width: 500px;
+            font-size: 1rem;
+            color: #86868b;
+            line-height: 1.6;
+            max-width: 420px;
             margin: 0 auto;
         }
 
         /* Footer */
         footer {
             padding: 40px 0;
-            border-top: 1px solid var(--border);
             text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            font-size: 0.82rem;
+            color: #86868b;
         }
 
         footer a {
-            color: var(--accent-hover);
+            color: #424245;
             text-decoration: none;
+            transition: color 0.2s;
         }
 
         footer a:hover {
-            color: var(--text);
+            color: #0066cc;
         }
 
-        @media (max-width: 600px) {
-            .hero { padding: 48px 0 32px; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 64px 0 48px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero .subtitle { font-size: 1.05rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .features h2 { font-size: 1.6rem; }
+            .screenshot-gallery img { max-width: 80%; }
+            .privacy-card { padding: 40px 28px; }
+        }
+
+        @media (max-width: 480px) {
             .hero h1 { font-size: 1.8rem; }
-            .hero p { font-size: 1rem; }
-            .features h2, .privacy h2 { font-size: 1.4rem; }
+            .download-buttons { flex-direction: column; }
         }
     </style>
 </head>
 <body>
+    <div class="ambient">
+        <div class="ambient-orb ambient-orb-1"></div>
+        <div class="ambient-orb ambient-orb-2"></div>
+        <div class="ambient-orb ambient-orb-3"></div>
+    </div>
+
     <div class="container">
 
         <section class="hero">
             <img src="logo.png" alt="Give Me A Break" class="hero-logo">
             <h1>Give Me A Break</h1>
-            <p>A lightweight macOS menu bar app that reminds you to take breaks, fix your posture, and switch between standing and sitting.</p>
-            <a href="https://github.com/jxucoder/give-me-a-break/releases/latest" class="download-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-                Download for macOS
-            </a>
-            <div class="download-meta">Requires macOS 14 (Sonoma) or later &middot; Free &middot; Open Source</div>
-            <div class="download-meta" style="margin-top: 10px;">
-                Download the <strong>GiveMeABreak-x.x.x.zip</strong> file, unzip it, and drag the app to your Applications folder.
+            <p class="subtitle">A lightweight macOS menu bar app that reminds you to take breaks, fix your posture, and switch between standing and sitting.</p>
+            <div class="download-buttons">
+                <a href="https://apps.apple.com/us/app/give-me-a-break-health-timer/id6759898658?mt=12" class="appstore-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    <span class="appstore-text">
+                        <span class="appstore-label">Download on the</span>
+                        <span class="appstore-store">Mac App Store</span>
+                    </span>
+                </a>
+                <a href="https://github.com/jxucoder/give-me-a-break/releases/latest/download/GiveMeABreak.dmg" class="download-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                    Direct Download
+                </a>
             </div>
+            <div class="download-meta">Requires macOS 14 Sonoma or later</div>
             <div class="download-meta" style="margin-top: 12px;">
-                Or install with Homebrew: <code>brew tap jxucoder/tap && brew install --cask give-me-a-break</code>
+                <a href="https://github.com/jxucoder/give-me-a-break" class="github-link">
+                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    View on GitHub
+                </a>
             </div>
         </section>
 
-        <section class="screenshot-section">
+        <section class="screenshots">
             <div class="screenshot-gallery">
                 <img src="screenshot-menubar.png" alt="Menu bar controls with timer, interval slider, and display mode picker">
                 <img src="screenshot-fullscreen.png" alt="Fullscreen break reminder overlay">
@@ -256,6 +439,7 @@
 
         <section class="features">
             <h2>Built for your wellbeing</h2>
+            <p class="section-subtitle">Everything you need to stay healthy at your desk.</p>
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">&#9749;</div>
@@ -280,7 +464,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">&#129504;</div>
                     <h3>AI Messages</h3>
-                    <p>Optional Apple Intelligence integration for varied, natural reminder text — entirely on-device.</p>
+                    <p>Optional Apple Intelligence integration for varied, natural reminder text, entirely on-device.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#128274;</div>
@@ -291,8 +475,11 @@
         </section>
 
         <section class="privacy">
-            <h2>Your data stays on your Mac</h2>
-            <p>Give Me A Break makes zero network requests. All settings are stored locally. If you enable AI messages, they're generated entirely on-device using Apple Intelligence.</p>
+            <div class="privacy-card">
+                <div class="privacy-icon">&#128272;</div>
+                <h2>Your data stays on your Mac</h2>
+                <p>Give Me A Break makes zero network requests. All settings are stored locally. If you enable AI messages, they're generated entirely on-device using Apple Intelligence.</p>
+            </div>
         </section>
 
         <footer>

@@ -102,12 +102,24 @@ jobs:
           cd "$RUNNER_TEMP/direct"
           ditto -c -k --keepParent "$APP_NAME.app" "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
 
+      - name: Create DMG
+        run: |
+          DMG_PATH="$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.dmg"
+          hdiutil create -volname "Give Me A Break" \
+            -srcfolder "$RUNNER_TEMP/direct/$APP_NAME.app" \
+            -ov -format UDZO "$DMG_PATH"
+
+      - name: Create fixed-name DMG for stable download URL
+        run: cp "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.dmg" "$RUNNER_TEMP/GiveMeABreak.dmg"
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
             "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip" \
+            "$RUNNER_TEMP/GiveMeABreak-${{ steps.version.outputs.VERSION }}.dmg" \
+            "$RUNNER_TEMP/GiveMeABreak.dmg" \
             --title "$GITHUB_REF_NAME" \
             --generate-notes
 
