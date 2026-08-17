@@ -172,49 +172,29 @@ jobs:
           DOWNLOAD_URL="https://github.com/jxucoder/give-me-a-break/releases/download/$GITHUB_REF_NAME/GiveMeABreak-${{ steps.version.outputs.VERSION }}.zip"
           SIGN_UPDATE="$RUNNER_TEMP/sparkle/bin/sign_update"
 
-          export BUILD SHORT LENGTH SIG_ATTR PUBDATE DOWNLOAD_URL APPCAST_OUT
           BUILD=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP_PATH/Contents/Info.plist")
           SHORT=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP_PATH/Contents/Info.plist")
           LENGTH=$(stat -f%z "$ZIP_PATH")
           SIG_ATTR=$(echo "$SPARKLE_PRIVATE_KEY" | "$SIGN_UPDATE" "$ZIP_PATH" --ed-key-file - | grep -o 'sparkle:edSignature="[^"]*"')
           PUBDATE=$(date -R)
-          APPCAST_OUT="$RUNNER_TEMP/appcast.xml"
 
-          python3 <<'PY'
-          import os
-          import re
-          from pathlib import Path
-
-          build = os.environ["BUILD"]
-          short = os.environ["SHORT"]
-          new_item = f"""    <item>
-          <title>Version {short}</title>
-          <pubDate>{os.environ["PUBDATE"]}</pubDate>
-          <sparkle:version>{build}</sparkle:version>
-          <sparkle:shortVersionString>{short}</sparkle:shortVersionString>
-          <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-          <enclosure url="{os.environ["DOWNLOAD_URL"]}" length="{os.environ["LENGTH"]}" type="application/octet-stream" {os.environ["SIG_ATTR"]} />
-        </item>"""
-
-          existing = Path("docs/appcast.xml").read_text() if Path("docs/appcast.xml").exists() else ""
-          kept = []
-          for item in re.findall(r"<item>.*?</item>", existing, flags=re.S):
-              version = re.search(r"<sparkle:version>(.*?)</sparkle:version>", item)
-              if version and version.group(1) != build:
-                  kept.append("    " + item.strip())
-
-          items = "\n".join([new_item] + kept[:4])
-          Path(os.environ["APPCAST_OUT"]).write_text(
-              '<?xml version="1.0" encoding="utf-8"?>\n'
-              '<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">\n'
-              "  <channel>\n"
-              "    <title>Give Me A Break</title>\n"
-              "    <link>https://givemeabreak.app/appcast.xml</link>\n"
-              f"{items}\n"
-              "  </channel>\n"
-              "</rss>\n"
-          )
-          PY
+          cat > "$RUNNER_TEMP/appcast.xml" <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>Give Me A Break</title>
+              <link>https://givemeabreak.app/appcast.xml</link>
+              <item>
+                <title>Version ${SHORT}</title>
+                <pubDate>${PUBDATE}</pubDate>
+                <sparkle:version>${BUILD}</sparkle:version>
+                <sparkle:shortVersionString>${SHORT}</sparkle:shortVersionString>
+                <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+                <enclosure url="${DOWNLOAD_URL}" length="${LENGTH}" type="application/octet-stream" ${SIG_ATTR} />
+              </item>
+            </channel>
+          </rss>
+          EOF
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
