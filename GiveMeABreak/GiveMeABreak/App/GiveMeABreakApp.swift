@@ -6,13 +6,16 @@ import Sparkle
 @main
 struct GiveMeABreakApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @ObservedObject private var menuBar = MenuBarViewModel.shared
     #if !APP_STORE
     private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
     #endif
 
     var body: some Scene {
-        MenuBarExtra("Give Me A Break", systemImage: "cup.and.saucer.fill") {
+        MenuBarExtra {
             MenuBarView()
+        } label: {
+            Label("Give Me A Break", systemImage: menuBar.isPaused ? "cup.and.saucer" : "cup.and.saucer.fill")
         }
         .menuBarExtraStyle(.window)
 

@@ -18,11 +18,14 @@ struct SettingsView: View {
                 .tabItem { Label("General", systemImage: "gear") }
             #endif
 
+            RemindersSettingsView()
+                .tabItem { Label("Reminders", systemImage: "bell") }
+
             LLMSettingsView()
                 .tabItem {
                     Label("AI Messages", systemImage: "brain")
                 }
         }
-        .frame(width: 520, height: 520)
+        .frame(width: 520, height: 560)
     }
 }

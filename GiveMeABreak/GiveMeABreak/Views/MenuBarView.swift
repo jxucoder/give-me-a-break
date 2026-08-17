@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct MenuBarView: View {
     @ObservedObject var viewModel = MenuBarViewModel.shared
@@ -7,7 +8,6 @@ struct MenuBarView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header
             HStack {
                 Image(systemName: "cup.and.saucer.fill")
                     .font(.title3)
@@ -20,7 +20,6 @@ struct MenuBarView: View {
             .padding(.top, 14)
             .padding(.bottom, 10)
 
-            // Timer cards
             let enabledTypes = ReminderType.allCases.filter { settingsVM.isEnabled(for: $0) }
 
             if enabledTypes.isEmpty {
@@ -28,13 +27,22 @@ struct MenuBarView: View {
             } else {
                 VStack(spacing: 6) {
                     ForEach(enabledTypes) { type in
-                        timerCard(for: type)
+                        TimerCard(
+                            type: type,
+                            viewModel: viewModel,
+                            settingsVM: settingsVM,
+                            isExpanded: expandedSlider == type,
+                            onToggleExpand: {
+                                withAnimation(.snappy(duration: 0.2)) {
+                                    expandedSlider = expandedSlider == type ? nil : type
+                                }
+                            }
+                        )
                     }
                 }
                 .padding(.horizontal, 10)
             }
 
-            // Actions
             VStack(spacing: 2) {
                 Divider()
                     .padding(.vertical, 6)
@@ -46,14 +54,16 @@ struct MenuBarView: View {
                     }
                     .buttonStyle(ActionChipButtonStyle())
                     .simultaneousGesture(TapGesture().onEnded {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            NSApp.activate(ignoringOtherApps: true)
-                            for window in NSApp.windows where window.isVisible {
-                                window.collectionBehavior.insert(.canJoinAllSpaces)
-                                window.orderFrontRegardless()
-                            }
-                        }
+                        Self.bringSettingsForward()
                     })
+
+                    if !enabledTypes.isEmpty {
+                        actionButton(
+                            title: viewModel.isPaused ? "Resume" : "Pause",
+                            systemImage: viewModel.isPaused ? "play.fill" : "pause.fill",
+                            action: { viewModel.togglePause() }
+                        )
+                    }
 
                     actionButton(
                         title: "Quit",
@@ -70,12 +80,62 @@ struct MenuBarView: View {
         .onDisappear { viewModel.menuDidDisappear() }
     }
 
-    // MARK: - Timer Card
+    private var emptyState: some View {
+        VStack(spacing: 6) {
+            Image(systemName: "moon.zzz.fill")
+                .font(.title2)
+                .foregroundStyle(.secondary)
+            Text("No reminders enabled")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text("Open Settings → Reminders to get started")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+    }
 
-    private func timerCard(for type: ReminderType) -> some View {
-        let currentInterval = Double(settingsVM.interval(for: type))
+    private func actionButton(title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            actionLabel(title: title, systemImage: systemImage)
+        }
+        .buttonStyle(ActionChipButtonStyle())
+    }
 
-        return VStack(spacing: 6) {
+    private func actionLabel(title: String, systemImage: String) -> some View {
+        VStack(spacing: 3) {
+            Image(systemName: systemImage)
+                .font(.system(size: 12))
+            Text(title)
+                .font(.caption2)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 6)
+    }
+
+    private static func bringSettingsForward() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            NSApp.activate(ignoringOtherApps: true)
+            if let window = NSApp.windows.first(where: {
+                $0.identifier?.rawValue == "com_apple_SwiftUI_Settings_window"
+            }) {
+                window.collectionBehavior.insert(.canJoinAllSpaces)
+                window.makeKeyAndOrderFront(nil)
+            }
+        }
+    }
+}
+
+private struct TimerCard: View {
+    let type: ReminderType
+    @ObservedObject var viewModel: MenuBarViewModel
+    @ObservedObject var settingsVM: SettingsViewModel
+    let isExpanded: Bool
+    let onToggleExpand: () -> Void
+
+    var body: some View {
+        VStack(spacing: 6) {
             HStack(spacing: 10) {
                 ZStack {
                     Circle()
@@ -116,76 +176,29 @@ struct MenuBarView: View {
                 Spacer()
 
                 HStack(spacing: 4) {
-                    Button(action: { viewModel.triggerTestNotification(for: type) }) {
-                        Image(systemName: "bell.badge")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 24, height: 24)
-                            .background(
-                                Circle()
-                                    .fill(Color.primary.opacity(0.06))
-                            )
+                    iconButton("bell.badge", help: "Send test notification") {
+                        viewModel.triggerTestNotification(for: type)
                     }
-                    .buttonStyle(.plain)
-                    .help("Send test notification")
-
-                    Button(action: { viewModel.togglePause(for: type) }) {
-                        Image(systemName: viewModel.isPaused(for: type) ? "play.fill" : "pause.fill")
-                            .font(.caption2)
-                            .foregroundStyle(viewModel.isPaused(for: type) ? .orange : .secondary)
-                            .frame(width: 24, height: 24)
-                            .background(
-                                Circle()
-                                    .fill(viewModel.isPaused(for: type)
-                                          ? Color.orange.opacity(0.15)
-                                          : Color.primary.opacity(0.06))
-                            )
+                    iconButton(
+                        viewModel.isPaused(for: type) ? "play.fill" : "pause.fill",
+                        help: viewModel.isPaused(for: type) ? "Resume" : "Pause",
+                        emphasized: viewModel.isPaused(for: type)
+                    ) {
+                        viewModel.togglePause(for: type)
                     }
-                    .buttonStyle(.plain)
-                    .help(viewModel.isPaused(for: type) ? "Resume" : "Pause")
-
-                    Button(action: { viewModel.skipNext(for: type) }) {
-                        Image(systemName: "arrow.counterclockwise")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 24, height: 24)
-                            .background(
-                                Circle()
-                                    .fill(Color.primary.opacity(0.06))
-                            )
+                    iconButton("arrow.counterclockwise", help: "Reset timer") {
+                        viewModel.skipNext(for: type)
                     }
-                    .buttonStyle(.plain)
-                    .help("Reset timer")
                 }
             }
 
-            if expandedSlider == type {
+            if isExpanded {
                 VStack(spacing: 8) {
-                    HStack(spacing: 6) {
-                        Text("5m")
-                            .font(.system(size: 9, weight: .medium))
-                            .foregroundStyle(.tertiary)
-
-                        Slider(
-                            value: Binding(
-                                get: { currentInterval },
-                                set: { settingsVM.setInterval(Int($0), for: type) }
-                            ),
-                            in: 5...120,
-                            step: 5
-                        )
-                        .tint(type.tintColor)
-
-                        Text("2h")
-                            .font(.system(size: 9, weight: .medium))
-                            .foregroundStyle(.tertiary)
-
-                        let mins = Int(currentInterval)
-                        Text(mins >= 60 ? "\(mins / 60)h\(mins % 60 > 0 ? " \(mins % 60)m" : "")" : "\(mins)m")
-                            .font(.system(size: 10, weight: .semibold).monospacedDigit())
-                            .foregroundStyle(type.tintColor)
-                            .fixedSize()
-                    }
+                    IntervalSlider(
+                        tint: type.tintColor,
+                        minutes: settingsVM.interval(for: type),
+                        onCommit: { settingsVM.setInterval($0, for: type) }
+                    )
 
                     Picker("Display", selection: Binding(
                         get: { settingsVM.displayMode(for: type) },
@@ -196,6 +209,15 @@ struct MenuBarView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .labelsHidden()
+
+                    Button("Disable \(type.displayName)") {
+                        settingsVM.setEnabled(false, for: type)
+                    }
+                    .buttonStyle(.plain)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
@@ -203,57 +225,29 @@ struct MenuBarView: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .contentShape(Rectangle())
-        .onTapGesture {
-            withAnimation(.snappy(duration: 0.2)) {
-                expandedSlider = expandedSlider == type ? nil : type
-            }
-        }
+        .onTapGesture(perform: onToggleExpand)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.primary.opacity(0.04))
         )
     }
 
-    // MARK: - Empty State
-
-    private var emptyState: some View {
-        VStack(spacing: 6) {
-            Image(systemName: "moon.zzz.fill")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-            Text("No reminders enabled")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text("Open Settings to get started")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
-    }
-
-    // MARK: - Action Buttons
-
-    private func actionButton(title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+    private func iconButton(_ systemImage: String, help: String, emphasized: Bool = false, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            actionLabel(title: title, systemImage: systemImage)
-        }
-        .buttonStyle(ActionChipButtonStyle())
-    }
-
-    private func actionLabel(title: String, systemImage: String) -> some View {
-        VStack(spacing: 3) {
             Image(systemName: systemImage)
-                .font(.system(size: 12))
-            Text(title)
                 .font(.caption2)
+                .foregroundStyle(emphasized ? .orange : .secondary)
+                .frame(width: 24, height: 24)
+                .background(
+                    Circle()
+                        .fill(emphasized ? Color.orange.opacity(0.15) : Color.primary.opacity(0.06))
+                )
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 6)
+        .buttonStyle(.plain)
+        .help(help)
+        .accessibilityLabel(help)
     }
 }
-
-// MARK: - Action Chip Button Style
 
 private struct ActionChipButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {

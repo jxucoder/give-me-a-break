@@ -59,7 +59,7 @@ final class MenuBarViewModel: ObservableObject {
                 self?.updateDisplayTimers()
             }
         }
-        RunLoop.main.add(displayTimer!, forMode: .default)
+        RunLoop.main.add(displayTimer!, forMode: .common)
     }
 
     private func updateDisplayTimers() {

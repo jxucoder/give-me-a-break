@@ -79,6 +79,32 @@ enum ReminderType: String, CaseIterable, Codable, Identifiable {
             ]
         }
     }
+
+    var randomFallbackMessage: String {
+        fallbackMessages.randomElement() ?? displayName
+    }
+
+    func fallbackMessage(isStanding: Bool = false) -> String {
+        switch self {
+        case .standSit:
+            let standing = [
+                "Time to sit down and give your legs a rest.",
+                "You've been standing — sit down and reset.",
+                "Sit down for a while. Alternating positions reduces fatigue.",
+                "Switch to sitting. Your feet will thank you.",
+            ]
+            let sitting = [
+                "Time to stand up and change your working position.",
+                "You've been sitting — stand up and stretch.",
+                "Stand for a while. Alternating positions reduces fatigue.",
+                "Switch to standing. Keep your body moving.",
+            ]
+            return (isStanding ? standing : sitting).randomElement() ?? randomFallbackMessage
+        default:
+            return randomFallbackMessage
+        }
+    }
+
     /// Prompt fragment for LLM message generation
     var promptDescription: String {
         switch self {
@@ -88,6 +114,17 @@ enum ReminderType: String, CaseIterable, Codable, Identifiable {
             return "checking and correcting sitting/standing posture"
         case .standSit:
             return "switching between standing and sitting position at their desk"
+        }
+    }
+
+    func promptDescription(isStanding: Bool) -> String {
+        switch self {
+        case .standSit:
+            return isStanding
+                ? "sitting down after standing at their desk"
+                : "standing up after sitting at their desk"
+        default:
+            return promptDescription
         }
     }
 }

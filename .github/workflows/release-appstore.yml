@@ -104,12 +104,20 @@ jobs:
 
       - name: Build archive
         run: |
+          BUILD=$(python3 - <<'PY'
+          import re
+          text = open("GiveMeABreak/GiveMeABreak.xcodeproj/project.pbxproj").read()
+          match = re.search(r"CURRENT_PROJECT_VERSION = ([^;]+);", text)
+          print(match.group(1).strip().strip('"') if match else "")
+          PY
+          )
           xcodebuild archive \
             -project "$PROJECT_DIR/$PROJECT_FILE" \
             -scheme "$SCHEME" \
             -configuration Release-AppStore \
             -archivePath "$RUNNER_TEMP/$SCHEME.xcarchive" \
             MARKETING_VERSION="${{ inputs.version }}" \
+            CURRENT_PROJECT_VERSION="$BUILD" \
             -quiet
 
       - name: Export for App Store

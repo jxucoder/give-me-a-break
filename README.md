@@ -81,9 +81,10 @@ Requires macOS 14 (Sonoma) or later and Xcode 16+.
 |---|---|
 | Three independent timers | Break, Posture, Stand/Sit with individual intervals and controls |
 | Visual progress rings | Color-coded indicators show time remaining at a glance |
-| Menu bar controls | Pause, resume, reset, and adjust intervals without leaving your workflow |
+| Menu bar controls | Pause, resume, reset, disable, and adjust intervals without leaving your workflow |
 | Flexible display modes | Notification, banner, or fullscreen overlay per reminder |
-| Smart notifications | macOS notifications with snooze options (5, 10, or 15 min) |
+| Smart notifications | macOS notifications with snooze (5/10/15 min) and Done; snooze delays that timer |
+| Idle and sleep aware | Skips reminders while you are away; missed timers do not pile up after sleep |
 | AI messages | Optional on-device Apple Intelligence for varied reminder text (macOS 26+) |
 | Auto-updates | Built-in Sparkle updater (direct download version) |
 | Launch at login | Start automatically with your Mac |
@@ -93,9 +94,34 @@ Requires macOS 14 (Sonoma) or later and Xcode 16+.
 
 Open **Settings** from the menu bar dropdown:
 
-- **General** — Launch at login, notification sounds, overlay duration, check for updates
+- **General** — Launch at login, show in Dock, notification sounds, skip while idle, overlay duration, check for updates
 - **Reminders** — Enable/disable each reminder, set intervals, choose display mode
 - **AI Messages** — Enable Apple Intelligence, pick a tone, or write a custom prompt
+
+## Release
+
+Direct download (Sparkle) and the Mac App Store are separate pipelines. You need an Apple Developer Program membership for both, but you do **not** need to click around the developer website for a routine GitHub/Sparkle release.
+
+**Before every release**, bump both values in `GiveMeABreak.xcodeproj`:
+
+- `MARKETING_VERSION` — user-facing version, e.g. `1.7.0` (must match the git tag)
+- `CURRENT_PROJECT_VERSION` — integer build number, e.g. `12` (must be higher than the last shipped build; Sparkle compares this, not `1.7.0`)
+
+### Direct download (Sparkle)
+
+1. Commit the version bump on `main`.
+2. Tag and push: `git tag v1.7.0 && git push origin v1.7.0`
+3. GitHub Actions notarizes a Developer ID build, publishes the GitHub Release, and updates [appcast.xml](https://givemeabreak.app/appcast.xml).
+
+This uses certificates and notary credentials already stored as repo secrets. You only open [developer.apple.com](https://developer.apple.com/account) if a Developer ID certificate or app-specific password expired.
+
+### Mac App Store
+
+1. Bump versions as above.
+2. Run the **Release (App Store)** workflow with the same marketing version.
+3. The build uploads to App Store Connect. You still submit that build for review (and release) in [App Store Connect](https://appstoreconnect.apple.com).
+
+That App Store Connect step is the one that requires the Apple website.
 
 ## Privacy
 

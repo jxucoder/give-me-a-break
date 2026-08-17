@@ -1,5 +1,5 @@
 import Foundation
-import Combine
+import AppKit
 import ServiceManagement
 import os.log
 
@@ -13,27 +13,32 @@ final class SettingsViewModel: ObservableObject {
     @Published var settings: AppSettings {
         didSet {
             save()
+            if oldValue.showInDock != settings.showInDock {
+                applyActivationPolicy()
+            }
         }
     }
 
     @Published var notificationStatus: String = "Unknown"
 
     private init() {
-        if let data = UserDefaults.standard.data(forKey: Self.settingsKey),
-           let decoded = try? JSONDecoder().decode(AppSettings.self, from: data) {
-            self.settings = decoded
-        } else {
-            self.settings = .default
-        }
+        self.settings = AppSettings.load(from: UserDefaults.standard.data(forKey: Self.settingsKey))
         syncLaunchAtLoginState()
     }
 
     // MARK: - Persistence
 
     private func save() {
-        if let data = try? JSONEncoder().encode(settings) {
+        do {
+            let data = try JSONEncoder().encode(settings)
             UserDefaults.standard.set(data, forKey: Self.settingsKey)
+        } catch {
+            Self.logger.error("Failed to save settings: \(error.localizedDescription)")
         }
+    }
+
+    func applyActivationPolicy() {
+        NSApp.setActivationPolicy(settings.showInDock ? .regular : .accessory)
     }
 
     // MARK: - Launch at Login
@@ -96,7 +101,7 @@ final class SettingsViewModel: ObservableObject {
         case .authorized:
             notificationStatus = "Authorized"
         case .denied:
-            notificationStatus = "Denied — enable in System Settings > Notifications"
+            notificationStatus = "Denied — banner overlay will be used instead"
         case .notDetermined:
             notificationStatus = "Not yet requested"
         case .provisional:

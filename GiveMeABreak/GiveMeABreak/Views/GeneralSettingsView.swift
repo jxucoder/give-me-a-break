@@ -19,8 +19,22 @@ struct GeneralSettingsView: View {
                 ))
                 .tint(.blue)
 
+                Toggle("Show in Dock", isOn: $settingsVM.settings.showInDock)
+                    .tint(.blue)
+
                 Toggle("Play Notification Sounds", isOn: $settingsVM.settings.playSounds)
                     .tint(.blue)
+
+                Toggle("Skip reminders while idle", isOn: $settingsVM.settings.skipWhenIdle)
+                    .tint(.blue)
+
+                if settingsVM.settings.skipWhenIdle {
+                    Stepper(
+                        "Idle after \(settingsVM.settings.idleThresholdMinutes) min",
+                        value: $settingsVM.settings.idleThresholdMinutes,
+                        in: 1...30
+                    )
+                }
             }
 
             Section("Overlay Reminders") {
@@ -69,7 +83,7 @@ struct GeneralSettingsView: View {
                 }
 
                 if settingsVM.notificationStatus.contains("Denied") {
-                    Text("Enable notifications in System Settings > Notifications > Give Me A Break")
+                    Text("Notification mode will fall back to a banner. You can also enable notifications in System Settings > Notifications > Give Me A Break.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

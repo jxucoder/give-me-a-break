@@ -55,6 +55,15 @@ struct OverlayView: View {
 
                 Spacer()
 
+                if let type = manager.currentType {
+                    Button("Snooze 5m") {
+                        ReminderScheduler.shared.snooze(type: type, minutes: 5)
+                    }
+                    .buttonStyle(.plain)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.85))
+                }
+
                 Button(action: { manager.dismiss() }) {
                     Text("Dismiss")
                         .font(.subheadline.weight(.medium))
@@ -67,6 +76,7 @@ struct OverlayView: View {
                         )
                 }
                 .buttonStyle(.plain)
+                .keyboardShortcut(.cancelAction)
             }
         }
         .padding(20)
@@ -121,18 +131,36 @@ struct OverlayView: View {
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.4))
 
-                Button(action: { manager.dismiss() }) {
-                    Text("I'm on it!")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 32)
-                        .padding(.vertical, 12)
-                        .background(
-                            Capsule()
-                                .fill(manager.currentType?.tintColor ?? .teal)
-                        )
+                HStack(spacing: 12) {
+                    if let type = manager.currentType {
+                        Button("Snooze 5 min") {
+                            ReminderScheduler.shared.snooze(type: type, minutes: 5)
+                        }
+                        .buttonStyle(.plain)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.8))
+                    }
+
+                    Button(action: {
+                        if let type = manager.currentType {
+                            ReminderScheduler.shared.markDone(type: type)
+                        } else {
+                            manager.dismiss()
+                        }
+                    }) {
+                        Text("I'm on it!")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 32)
+                            .padding(.vertical, 12)
+                            .background(
+                                Capsule()
+                                    .fill(manager.currentType?.tintColor ?? .teal)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .keyboardShortcut(.defaultAction)
                 }
-                .buttonStyle(.plain)
             }
         }
     }

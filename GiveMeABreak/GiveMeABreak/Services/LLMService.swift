@@ -60,14 +60,14 @@ final class LLMService: ObservableObject {
 
     // MARK: - Message Generation
 
-    func generateMessage(for type: ReminderType, tone: LLMTone, customPrompt: String = "") async -> String {
+    func generateMessage(for type: ReminderType, tone: LLMTone, customPrompt: String = "", isStanding: Bool = false) async -> String {
         #if canImport(FoundationModels)
         guard #available(macOS 26.0, *) else {
-            return type.fallbackMessages.randomElement()!
+            return type.fallbackMessage(isStanding: isStanding)
         }
 
         guard modelState == .available else {
-            return type.fallbackMessages.randomElement()!
+            return type.fallbackMessage(isStanding: isStanding)
         }
 
         isGenerating = true
@@ -82,7 +82,7 @@ final class LLMService: ObservableObject {
 
         let prompt = """
             \(customPrompt.trimmingCharacters(in: .whitespacesAndNewlines)) \
-            The reminder type is: \(type.promptDescription). \
+            The reminder type is: \(type.promptDescription(isStanding: isStanding)). \
             Output only the reminder text.
             """
 
@@ -108,15 +108,15 @@ final class LLMService: ObservableObject {
 
             text = text.trimmingCharacters(in: .whitespacesAndNewlines)
             if text.isEmpty {
-                return type.fallbackMessages.randomElement()!
+                return type.fallbackMessage(isStanding: isStanding)
             }
             return text
         } catch {
             Self.logger.error("Foundation Models error: \(error.localizedDescription)")
-            return type.fallbackMessages.randomElement()!
+            return type.fallbackMessage(isStanding: isStanding)
         }
         #else
-        return type.fallbackMessages.randomElement()!
+        return type.fallbackMessage(isStanding: isStanding)
         #endif
     }
 }

@@ -1,9 +1,12 @@
 import Foundation
-import Combine
+import os.log
 
 @MainActor
 final class ReminderScheduler: ObservableObject {
     static let shared = ReminderScheduler()
+
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.givemeabreak.app", category: "ReminderScheduler")
+    private static let snapshotKey = "timerSnapshots"
 
     struct TimerState {
         var isActive: Bool = false
@@ -11,7 +14,13 @@ final class ReminderScheduler: ObservableObject {
         var fireDate: Date?
         var timer: Timer?
         var intervalMinutes: Int = 0
-        /// Seconds remaining when paused, so we can resume accurately.
+        var remainingWhenPaused: TimeInterval?
+    }
+
+    private struct TimerSnapshot: Codable {
+        var fireDate: Date?
+        var intervalMinutes: Int
+        var isPaused: Bool
         var remainingWhenPaused: TimeInterval?
     }
 
@@ -27,76 +36,89 @@ final class ReminderScheduler: ObservableObject {
     private var notificationService: NotificationService { NotificationService.shared }
     private var overlayManager: OverlayManager { OverlayManager.shared }
     private var llmService: LLMService { LLMService.shared }
-    private var settingsCancellable: AnyCancellable?
-
-    private init() {
-        // Initialize timer states for all types
-        for type in ReminderType.allCases {
-            timerStates[type] = TimerState()
-        }
-    }
+    private var activityTokens: [NSObjectProtocol] = []
+    private var deliveryTasks: [ReminderType: Task<Void, Never>] = [:]
 
     /// Minimum gap (in seconds) between two notifications to avoid spam.
     private let coalescingGap: TimeInterval = 120
+    private var lastNotificationDate: Date = .distantPast
+
+    private init() {
+        for type in ReminderType.allCases {
+            timerStates[type] = TimerState()
+        }
+        restoreSnapshots()
+        activityTokens = SystemActivity.startObserving { [weak self] in
+            self?.handleSystemResume()
+        }
+    }
 
     // MARK: - Public API
 
     func configure(with settings: AppSettings) {
-        // Collect which types need a fresh timer vs. which can keep running.
-        var typesToStart: [(ReminderType, Int)] = []
-
         for type in ReminderType.allCases {
             let reminderSettings = settings.reminderSettings(for: type)
 
             guard reminderSettings.enabled else {
+                cancelDelivery(for: type)
                 stopTimer(for: type)
                 continue
             }
 
-            // If already running with the same interval, keep the existing timer.
-            if let state = timerStates[type],
-               state.isActive,
-               state.intervalMinutes == reminderSettings.intervalMinutes,
-               state.timer != nil {
+            var state = timerStates[type] ?? TimerState()
+
+            if state.isPaused {
+                state.intervalMinutes = reminderSettings.intervalMinutes
+                timerStates[type] = state
+                persistSnapshots()
                 continue
             }
 
-            typesToStart.append((type, reminderSettings.intervalMinutes))
-        }
+            if state.isActive,
+               state.timer != nil,
+               state.intervalMinutes == reminderSettings.intervalMinutes {
+                continue
+            }
 
-        for (type, intervalMinutes) in typesToStart {
-            startTimer(for: type, intervalMinutes: intervalMinutes, initialOffset: 0, settings: settings)
+            if let remaining = timeRemaining(for: type), remaining > 0 {
+                let capped = min(remaining, TimeInterval(reminderSettings.intervalMinutes * 60))
+                scheduleNext(for: type, delay: capped, intervalMinutes: reminderSettings.intervalMinutes)
+                continue
+            }
+
+            startTimer(for: type, intervalMinutes: reminderSettings.intervalMinutes)
         }
     }
 
     // MARK: - Per-Timer Pause / Resume
 
     func pause(type: ReminderType) {
-        guard let state = timerStates[type], state.isActive, !state.isPaused else { return }
+        guard let state = timerStates[type], (state.isActive || state.isPaused), !state.isPaused else { return }
+        cancelDelivery(for: type)
         let remaining = state.fireDate?.timeIntervalSinceNow ?? 0
         timerStates[type]?.timer?.invalidate()
         timerStates[type]?.timer = nil
         timerStates[type]?.isPaused = true
         timerStates[type]?.isActive = false
         timerStates[type]?.remainingWhenPaused = max(0, remaining)
+        persistSnapshots()
     }
 
     func resume(type: ReminderType, settings: AppSettings) {
         guard let state = timerStates[type], state.isPaused else { return }
         let remaining = state.remainingWhenPaused ?? TimeInterval(state.intervalMinutes * 60)
-        let interval = state.intervalMinutes > 0 ? state.intervalMinutes : settings.reminderSettings(for: type).intervalMinutes
+        let interval = state.intervalMinutes > 0
+            ? state.intervalMinutes
+            : settings.reminderSettings(for: type).intervalMinutes
 
         timerStates[type]?.isPaused = false
         timerStates[type]?.remainingWhenPaused = nil
-
-        resumeTimer(for: type, remaining: remaining, intervalMinutes: interval, settings: settings)
+        scheduleNext(for: type, delay: max(1, remaining), intervalMinutes: interval)
     }
 
     func isPaused(for type: ReminderType) -> Bool {
         timerStates[type]?.isPaused ?? false
     }
-
-    // MARK: - Global Pause / Resume (convenience)
 
     func pauseAll() {
         for type in ReminderType.allCases {
@@ -110,12 +132,31 @@ final class ReminderScheduler: ObservableObject {
         }
     }
 
-    // MARK: - Skip / Reset
-
     func skipNext(for type: ReminderType, settings: AppSettings) {
+        cancelDelivery(for: type)
         let interval = timerStates[type]?.intervalMinutes ?? settings.reminderSettings(for: type).intervalMinutes
         stopTimer(for: type)
-        startTimer(for: type, intervalMinutes: interval, initialOffset: 0, settings: settings)
+        startTimer(for: type, intervalMinutes: interval)
+    }
+
+    /// Delay this reminder and use it as the next fire, instead of stacking a one-off ping.
+    func snooze(type: ReminderType, minutes: Int) {
+        let settings = SettingsViewModel.shared.settings
+        guard settings.reminderSettings(for: type).enabled else { return }
+        cancelDelivery(for: type)
+        overlayManager.dismiss()
+        let interval = timerStates[type]?.intervalMinutes ?? settings.reminderSettings(for: type).intervalMinutes
+        timerStates[type]?.timer?.invalidate()
+        timerStates[type]?.isPaused = false
+        timerStates[type]?.remainingWhenPaused = nil
+        scheduleNext(for: type, delay: TimeInterval(max(1, minutes) * 60), intervalMinutes: interval)
+    }
+
+    /// User handled the reminder — restart the full interval.
+    func markDone(type: ReminderType) {
+        let settings = SettingsViewModel.shared.settings
+        overlayManager.dismiss()
+        skipNext(for: type, settings: settings)
     }
 
     func timeRemaining(for type: ReminderType) -> TimeInterval? {
@@ -125,37 +166,30 @@ final class ReminderScheduler: ObservableObject {
             return state.remainingWhenPaused
         }
 
-        guard state.isActive, let fireDate = state.fireDate else { return nil }
+        guard let fireDate = state.fireDate else { return nil }
         let remaining = fireDate.timeIntervalSinceNow
         return remaining > 0 ? remaining : nil
     }
 
     // MARK: - Timer Management
 
-    private func startTimer(for type: ReminderType, intervalMinutes: Int, initialOffset: TimeInterval, settings: AppSettings) {
+    private func startTimer(for type: ReminderType, intervalMinutes: Int) {
+        guard !(timerStates[type]?.isPaused ?? false) else { return }
+        scheduleNext(for: type, delay: TimeInterval(intervalMinutes * 60), intervalMinutes: intervalMinutes)
+    }
+
+    private func scheduleNext(for type: ReminderType, delay: TimeInterval, intervalMinutes: Int) {
         guard !(timerStates[type]?.isPaused ?? false) else { return }
 
         timerStates[type]?.timer?.invalidate()
 
-        let firstFire = TimeInterval(intervalMinutes * 60) + initialOffset
-        scheduleNext(for: type, delay: firstFire, intervalMinutes: intervalMinutes, settings: settings)
-    }
-
-    private func resumeTimer(for type: ReminderType, remaining: TimeInterval, intervalMinutes: Int, settings: AppSettings) {
-        scheduleNext(for: type, delay: remaining, intervalMinutes: intervalMinutes, settings: settings)
-    }
-
-    private func scheduleNext(for type: ReminderType, delay: TimeInterval, intervalMinutes: Int, settings: AppSettings) {
-        guard !(timerStates[type]?.isPaused ?? false) else { return }
-
         let fireDate = Date().addingTimeInterval(delay)
-        let nextInterval = TimeInterval(intervalMinutes * 60)
-
-        let timer = Timer(timeInterval: delay, repeats: false) { [weak self] _ in
-            MainActor.assumeIsolated {
+        let timer = Timer(timeInterval: max(0.05, delay), repeats: false) { [weak self] _ in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                self.scheduleNext(for: type, delay: nextInterval, intervalMinutes: intervalMinutes, settings: settings)
-                self.timerFired(for: type, settings: settings)
+                let interval = self.timerStates[type]?.intervalMinutes ?? intervalMinutes
+                self.scheduleNext(for: type, delay: TimeInterval(interval * 60), intervalMinutes: interval)
+                self.timerFired(for: type)
             }
         }
         RunLoop.main.add(timer, forMode: .common)
@@ -166,42 +200,79 @@ final class ReminderScheduler: ObservableObject {
             timer: timer,
             intervalMinutes: intervalMinutes
         )
+        persistSnapshots()
     }
 
     private func stopTimer(for type: ReminderType) {
         timerStates[type]?.timer?.invalidate()
         timerStates[type] = TimerState()
+        persistSnapshots()
     }
 
-    /// Tracks when the last notification was actually delivered to coalesce nearby ones.
-    private var lastNotificationDate: Date = .distantPast
+    private func cancelDelivery(for type: ReminderType) {
+        deliveryTasks[type]?.cancel()
+        deliveryTasks[type] = nil
+    }
 
-    private func timerFired(for type: ReminderType, settings: AppSettings) {
-        // Coalesce: if another notification fired very recently, delay briefly
-        let now = Date()
-        let sinceLastNotification = now.timeIntervalSince(lastNotificationDate)
-        let delay: TimeInterval = sinceLastNotification < coalescingGap ? coalescingGap - sinceLastNotification : 0
+    private func timerFired(for type: ReminderType) {
+        cancelDelivery(for: type)
+        deliveryTasks[type] = Task { @MainActor [weak self] in
+            guard let self else { return }
 
-        Task {
+            let now = Date()
+            let sinceLast = now.timeIntervalSince(self.lastNotificationDate)
+            let delay = sinceLast < self.coalescingGap ? self.coalescingGap - sinceLast : 0
             if delay > 0 {
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
             }
 
+            guard !Task.isCancelled else { return }
+
+            let settings = SettingsViewModel.shared.settings
+            guard settings.reminderSettings(for: type).enabled else { return }
+            guard !self.isPaused(for: type) else { return }
+
+            if settings.skipWhenIdle {
+                let threshold = TimeInterval(max(1, settings.idleThresholdMinutes) * 60)
+                if !SystemActivity.isUserPresent(idleThreshold: threshold) {
+                    Self.logger.info("Skipping \(type.rawValue, privacy: .public) reminder — user idle or screen locked")
+                    return
+                }
+            }
+
+            let isStanding = settings.isStanding
             let message: String
-            if settings.llmEnabled && llmService.isModelReady {
-                message = await llmService.generateMessage(for: type, tone: settings.llmTone, customPrompt: settings.customPrompt)
+            if settings.llmEnabled && self.llmService.isModelReady {
+                message = await self.llmService.generateMessage(
+                    for: type,
+                    tone: settings.llmTone,
+                    customPrompt: settings.customPrompt,
+                    isStanding: isStanding
+                )
             } else {
-                message = type.fallbackMessages.randomElement()!
+                message = type.fallbackMessage(isStanding: isStanding)
+            }
+
+            guard !Task.isCancelled else { return }
+
+            if type == .standSit {
+                SettingsViewModel.shared.settings.isStanding.toggle()
             }
 
             self.lastNotificationDate = Date()
-
-            let displayMode = settings.reminderSettings(for: type).displayMode
-            deliverReminder(type: type, message: message, mode: displayMode, settings: settings)
+            await self.deliverReminder(type: type, message: message, settings: settings)
         }
     }
 
-    private func deliverReminder(type: ReminderType, message: String, mode: ReminderDisplayMode, settings: AppSettings) {
+    private func deliverReminder(type: ReminderType, message: String, settings: AppSettings) async {
+        var mode = settings.reminderSettings(for: type).displayMode
+        if mode == .notification {
+            let status = await notificationService.authorizationStatus()
+            if status == .denied || status == .notDetermined {
+                mode = .banner
+            }
+        }
+
         switch mode {
         case .notification:
             notificationService.sendReminder(type: type, message: message, playSound: settings.playSounds)
@@ -216,19 +287,79 @@ final class ReminderScheduler: ObservableObject {
         }
     }
 
-    // MARK: - Test / Manual trigger
-
     func triggerTestNotification(type: ReminderType, settings: AppSettings) {
-        Task {
+        cancelDelivery(for: type)
+        deliveryTasks[type] = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let isStanding = settings.isStanding
             let message: String
-            if settings.llmEnabled && llmService.isModelReady {
-                message = await llmService.generateMessage(for: type, tone: settings.llmTone, customPrompt: settings.customPrompt)
+            if settings.llmEnabled && self.llmService.isModelReady {
+                message = await self.llmService.generateMessage(
+                    for: type,
+                    tone: settings.llmTone,
+                    customPrompt: settings.customPrompt,
+                    isStanding: isStanding
+                )
             } else {
-                message = type.fallbackMessages.randomElement()!
+                message = type.fallbackMessage(isStanding: isStanding)
             }
+            guard !Task.isCancelled else { return }
+            await self.deliverReminder(type: type, message: message, settings: SettingsViewModel.shared.settings)
+        }
+    }
 
-            let displayMode = settings.reminderSettings(for: type).displayMode
-            deliverReminder(type: type, message: message, mode: displayMode, settings: settings)
+    // MARK: - Sleep / lock resume
+
+    func handleSystemResume() {
+        let settings = SettingsViewModel.shared.settings
+        for type in ReminderType.allCases {
+            guard settings.reminderSettings(for: type).enabled else { continue }
+            guard let state = timerStates[type], !state.isPaused else { continue }
+            let interval = state.intervalMinutes > 0
+                ? state.intervalMinutes
+                : settings.reminderSettings(for: type).intervalMinutes
+
+            if let fireDate = state.fireDate, fireDate.timeIntervalSinceNow > 1 {
+                scheduleNext(for: type, delay: fireDate.timeIntervalSinceNow, intervalMinutes: interval)
+            } else if state.isActive || state.fireDate != nil {
+                startTimer(for: type, intervalMinutes: interval)
+            }
+        }
+    }
+
+    // MARK: - Persistence
+
+    private func persistSnapshots() {
+        var snapshots: [String: TimerSnapshot] = [:]
+        for (type, state) in timerStates {
+            guard state.isActive || state.isPaused else { continue }
+            snapshots[type.rawValue] = TimerSnapshot(
+                fireDate: state.fireDate,
+                intervalMinutes: state.intervalMinutes,
+                isPaused: state.isPaused,
+                remainingWhenPaused: state.remainingWhenPaused
+            )
+        }
+        if let data = try? JSONEncoder().encode(snapshots) {
+            UserDefaults.standard.set(data, forKey: Self.snapshotKey)
+        }
+    }
+
+    private func restoreSnapshots() {
+        guard let data = UserDefaults.standard.data(forKey: Self.snapshotKey),
+              let snapshots = try? JSONDecoder().decode([String: TimerSnapshot].self, from: data) else {
+            return
+        }
+
+        for type in ReminderType.allCases {
+            guard let snapshot = snapshots[type.rawValue] else { continue }
+            timerStates[type] = TimerState(
+                isActive: false,
+                isPaused: snapshot.isPaused,
+                fireDate: snapshot.fireDate,
+                intervalMinutes: snapshot.intervalMinutes,
+                remainingWhenPaused: snapshot.remainingWhenPaused
+            )
         }
     }
 }

@@ -19,8 +19,9 @@ final class NotificationService {
     // MARK: - Authorization
 
     func requestAuthorization() async -> Bool {
+        cleanupStaleArt()
         do {
-            let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
+            let granted = try await center.requestAuthorization(options: [.alert, .sound])
             if granted {
                 registerCategories()
             }
@@ -73,6 +74,10 @@ final class NotificationService {
     // MARK: - Send Notification
 
     func sendReminder(type: ReminderType, message: String, playSound: Bool) {
+        let identifier = Self.identifier(for: type)
+        center.removeDeliveredNotifications(withIdentifiers: [identifier])
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+
         let content = UNMutableNotificationContent()
         content.title = type.displayName
         content.body = message
@@ -88,9 +93,9 @@ final class NotificationService {
         }
 
         let request = UNNotificationRequest(
-            identifier: "\(type.rawValue)-\(UUID().uuidString)",
+            identifier: identifier,
             content: content,
-            trigger: nil // deliver immediately
+            trigger: nil
         )
 
         center.add(request) { error in
@@ -100,42 +105,21 @@ final class NotificationService {
         }
     }
 
-    // MARK: - Snooze
-
-    func scheduleSnooze(type: ReminderType, message: String, playSound: Bool, delayMinutes: Int = 5) {
-        let content = UNMutableNotificationContent()
-        content.title = type.displayName
-        content.body = message
-        content.categoryIdentifier = "REMINDER"
-        content.userInfo = ["reminderType": type.rawValue]
-
-        if playSound {
-            content.sound = .default
-        }
-
-        if let attachment = artAttachment(for: type) {
-            content.attachments = [attachment]
-        }
-
-        let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: TimeInterval(delayMinutes * 60),
-            repeats: false
-        )
-
-        let request = UNNotificationRequest(
-            identifier: "snooze-\(type.rawValue)-\(UUID().uuidString)",
-            content: content,
-            trigger: trigger
-        )
-
-        center.add(request) { error in
-            if let error {
-                Self.logger.error("Failed to schedule snooze: \(error.localizedDescription)")
-            }
-        }
+    static func identifier(for type: ReminderType) -> String {
+        "reminder-\(type.rawValue)"
     }
 
     // MARK: - Notification Attachment
+
+    private func artDirectory() -> URL {
+        FileManager.default.temporaryDirectory
+            .appendingPathComponent("GiveMeABreakNotifications", isDirectory: true)
+    }
+
+    func cleanupStaleArt() {
+        try? FileManager.default.removeItem(at: artDirectory())
+        cachedArtURLs.removeAll()
+    }
 
     private func artAssetName(for type: ReminderType) -> String {
         switch type {
@@ -147,8 +131,7 @@ final class NotificationService {
 
     private func artAttachment(for type: ReminderType) -> UNNotificationAttachment? {
         let fm = FileManager.default
-        let tempDir = fm.temporaryDirectory
-            .appendingPathComponent("GiveMeABreakNotifications", isDirectory: true)
+        let tempDir = artDirectory()
         try? fm.createDirectory(at: tempDir, withIntermediateDirectories: true)
 
         let sourceURL: URL
@@ -189,8 +172,6 @@ final class NotificationService {
                 url: copyURL,
                 options: [UNNotificationAttachmentOptionsTypeHintKey: "public.png"]
             )
-            // Clean up the per-notification copy after UNUserNotificationCenter has
-            // had time to read and copy it into its own store (~30 s is ample).
             DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
                 try? FileManager.default.removeItem(at: copyURL)
             }
@@ -200,8 +181,6 @@ final class NotificationService {
             return nil
         }
     }
-
-    // MARK: - Cleanup
 
     func removeAllPending() {
         center.removeAllPendingNotificationRequests()

@@ -18,11 +18,13 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.givemeabreak.app
         PRODUCT_NAME: Give Me A Break
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.7.0"
+        CURRENT_PROJECT_VERSION: "12"
         INFOPLIST_FILE: GiveMeABreak/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_VERSION: "5.9"
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         CODE_SIGN_STYLE: Automatic
-        ENABLE_HARDENED_RUNTIME: NO
+        CODE_SIGN_ENTITLEMENTS: GiveMeABreak.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
